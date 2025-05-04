@@ -1,0 +1,351 @@
+#include "game_page.h"
+#include "ui_game_page.h"
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QDebug>
+#include <QObject>
+#include <QRandomGenerator>
+#include <QFile>
+#include <QTextStream>
+#include <QVector>
+#include <QString>
+#include <QMessageBox>
+#include <QTimer>
+#include <QFileDialog>
+
+game_page::game_page(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::game_page),
+    scene(new QGraphicsScene(this))
+{
+
+    setFixedSize(1200, 800);
+    setWindowTitle("game");
+
+    ui->setupUi(this);
+
+        ui->start_game->setFixedSize(100, 50); // عرض: 100 پیکسل، ارتفاع: 50 پیکسل
+        ui->start_game->setStyleSheet(
+            "QPushButton {"
+            "   border-radius: 15px;"
+            "   background-color: #4CAF50;"
+            "   padding: 8px;"
+            "   color: white;"
+            "   font: 75 25pt C059;"
+            "}"
+        );
+
+        ui->load_game_btn->setFixedSize(100, 50); // عرض: 100 پیکسل، ارتفاع: 50 پیکسل
+        ui->load_game_btn->setStyleSheet(
+            "QPushButton {"
+            "   border-radius: 15px;"
+            "   background-color: #4CAF50;"
+            "   padding: 8px;"
+            "   color: white;"
+            "   font: 75 25pt C059;"
+            "}"
+        );
+
+        ui->vw1->setRenderHint(QPainter::Antialiasing);
+        ui->vw1->setScene(scene);
+        currentPlayer = 1;
+        timeRemaining = 2 * 60; // 5 دقیقه
+        selectedAgent = nullptr;
+        targetHex = nullptr;
+
+       turnTimer = new QTimer(this);
+       connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
+       startPlayerTurn();
+}
+
+game_page::~game_page()
+{
+    delete ui;
+}
+
+
+void game_page::create_agent() {
+
+
+    qreal aSize = 40;
+
+    for (int row = 0; row < 4; ++row) {
+                for (int col = 0; col < 1; ++col) {
+                    qreal x = col * aSize * 1.5;
+                    qreal y = aSize * (row ) * 1.5+110;
+                    int aType = 1;
+                    agent* a = new agent(aSize, aType, this);
+                    int apow = row+7;
+                    a->set_power(apow);
+                    QColor acolor = a->getBaseColor();
+                    a->setPos(x, y);
+                    scene->addItem(a);
+                    a->setBrush(acolor);
+                    a->setPen(QPen(Qt::black, 1));
+                    a->Set_aishighlight(false);
+                    a->Set_aRow(row);
+                    a->Set_aCol(col);
+                    a->Set_IsAselected(false);
+                    a->setAcceptHoverEvents(true);
+                }
+            }
+
+    for (int row = 0; row < 4; ++row) {
+            for (int col = 0; col < 1; ++col) {
+                qreal x = col * aSize * 1.5+840;
+                qreal y = aSize * (row ) * 1.5+110;
+                int aType = 1;
+                agent* a2 = new agent(aSize, aType, this);
+                int apow = row+7;
+                 a2->set_power(apow);
+                QColor acolor = a2->getBaseColor();
+                a2->setPos(x, y);
+                scene->addItem(a2);
+                a2->setBrush(acolor);
+                a2->setPen(QPen(Qt::black, 1));
+                a2->Set_aishighlight(false);
+                a2->Set_aRow(row);
+                a2->Set_aCol(col);
+                a2->setFlag(QGraphicsItem::ItemIsMovable);
+                a2->Set_IsAselected(false);
+                a2->setAcceptHoverEvents(true);
+            }
+        }
+}
+
+void game_page::create_board(){
+
+    hexGrid.resize(HEX_ROWS);
+    for (int row = 0; row < HEX_ROWS; ++row) {
+        hexGrid[row].resize(HEX_COLS);
+    }
+
+
+     qreal hexSize = qMin(
+         (VIEW_WIDTH-80) / (HEX_COLS * 1.5),
+         (VIEW_HEIGHT-80) / ((HEX_ROWS + 0.5) * sqrt(3.0))
+     );
+     hexSize=36;
+    qreal hexWidth = hexSize * 2.0;
+    qreal hexHeight = hexSize * sqrt(3.0);
+
+    for (int col = 0; col < HEX_COLS; ++col) {
+       for (int row = 0; row < HEX_ROWS - (col % 2); ++row) {
+             qreal x = col * hexWidth * 0.75*1.05+200;
+             qreal y = hexHeight * (row + 0.5 * (col % 2))*1.05+80;
+
+             int hexType;
+             QString text= fgrid[row][col];
+             if (text == "1") {
+                hexType = 1;
+             } else if (text == "2") {
+                hexType = 2;
+             } else if (text == "~") {
+                hexType = 3;
+             } else if (text == "#") {
+                hexType = 4;
+             } else {
+                hexType = 5;
+             }
+
+             hexagonitem* hex = new hexagonitem(hexSize, hexType, this);
+
+             hex->set_mIshighlight(false);
+             hex->set_m_row(row);
+             hex->set_m_col(col);
+
+             hex->setPos(x, y);
+             scene->addItem(hex);
+             hex->setPen(QPen(Qt::white, 1));
+             hexGrid[row][col] = {
+                 hex
+                };
+              hexGrid[row][col]->set_x(x);
+              hexGrid[row][col]->set_y(y);
+              hexGrid[row][col]->Pos.setX(x);
+              hexGrid[row][col]->Pos.setY(y);
+             }
+       }
+
+}
+
+void game_page::parse(){
+
+
+
+
+//    fgrid.resize(HEX_ROWS);
+
+
+//    for (int row = 0; row < HEX_ROWS; ++row) {
+//        fgrid[row].resize(HEX_COLS);
+//        for (int col = 0; col < HEX_COLS; ++col) {
+//            fgrid[row][col]= ' ';
+//        }
+//    }
+
+    QString filepath = QFileDialog::getOpenFileName(this, "Select a File", "", "Text Files (*.txt);;All Files (*)");
+    QFile file(filepath);
+
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        QMessageBox::critical(this , "error" , "connot open file");
+        QString timeText = "connot open file";
+        ui->Message->setText(timeText);
+        return;
+     }
+
+     QTextStream in(&file);
+     QStringList lines;
+
+     while(!in.atEnd()) lines << in.readLine();
+     unsigned long row = 0;
+     unsigned long col = 0;
+
+     int j = 0;
+     int i = 1;
+
+     hrows = lines.size()/2;
+     hcols = lines[0].length()/3;
+
+           qDebug() << "Mouse pressed on hex at row:" << hrows << "col:" << hcols;
+           qDebug() << "Mouse pressed on hex at row:" << lines.size() << "col:" << lines[0].length();
+
+
+     fgrid.resize(hrows);
+
+
+     for (int row = 0; row < hrows; ++row) {
+         fgrid[row].resize(hcols);
+         for (int col = 0; col < hcols; ++col) {
+             fgrid[row][col]= ' ';
+         }
+     }
+
+
+
+     while(i < lines.size()){
+           QString line_e = lines[i];
+           QString line_o = lines[i + 1];
+
+           col = 0;
+           j = 1;
+           while(j < line_e.length()){
+                QChar c = line_e[j];
+                fgrid[row][col] =c.toLatin1();
+                col+=2;
+                j +=6;
+           }
+           col = 1;
+           j = 4;
+           while(j < line_o.length()){
+                fgrid[row][col] = line_o[j];
+                col+=2;
+                j +=6;
+          }
+
+          row++;
+          i +=2 ;
+     }
+
+    create_board();
+    create_agent();
+ }
+
+void game_page::set_name(const QString &name1, const QString & name2){
+
+   ui->label->setText(name1);
+   ui->label_2->setText(name2);
+}
+
+void game_page::on_load_game_btn_clicked()
+{
+    parse();
+    ui->load_game_btn->setDisabled(true);
+}
+
+void game_page::startPlayerTurn()
+{
+    timeRemaining = 2 * 60;
+    updateTimerDisplay();
+    turnTimer->start(1000);
+    QList<QGraphicsItem*> items = scene->items();
+    for (QGraphicsItem* item : items) {
+        if (agent* a = dynamic_cast<agent*>(item)) {
+            bool isLeftAgent = a->x() < scene->width() / 2;
+            a->setEnabled((currentPlayer == 1 && isLeftAgent) || (currentPlayer == 2 && !isLeftAgent));
+        }
+    }
+}
+
+void game_page::updateTimer()
+{
+    timeRemaining--;
+    updateTimerDisplay();
+
+    if (timeRemaining <= 0) {
+        turnTimer->stop();
+        switchPlayer();
+    }
+}
+
+void game_page::updateTimerDisplay()
+{
+    int minutes = timeRemaining / 60;
+    int seconds = timeRemaining % 60;
+    QString timeText = QString("%1:%2")
+    .arg(minutes, 2, 10, QLatin1Char('0'))
+    .arg(seconds, 2, 10, QLatin1Char('0'));
+    if (currentPlayer == 1) {
+        ui->player1Timer->setText(timeText);
+    } else {
+        ui->player2Timer->setText(timeText);
+    }
+}
+
+void game_page::switchPlayer()
+{
+    currentPlayer = (currentPlayer == 1) ? 2 : 1;
+    startPlayerTurn();
+}
+
+void game_page::agentSelected(agent* selected)
+{
+     qDebug() << "Agent clicked at power:" << selected->get_power();
+
+     QList<QGraphicsItem*> items = scene->items();
+     for (QGraphicsItem* item : items) {
+         agent* a = dynamic_cast<agent*>(item);
+         if (a) {
+             a->Set_IsAselected(false);
+         }
+     }
+
+     selectedAgent = selected;
+     if(selectedAgent->Get_IsAselected()) selectedAgent->Set_IsAselected(false);
+     else  selectedAgent->Set_IsAselected(true);
+}
+
+void game_page::handleHexagonClick(int row, int col) {
+    qDebug() << "Hex clicked at:" << row << "," << col;
+
+    if (!selectedAgent) return;
+
+        if ((currentPlayer == 1 &&  hexGrid[row][col]->get_m_type() == 1) ||
+            (currentPlayer == 2 &&  hexGrid[row][col]->get_m_type() == 2)) {
+
+            hexGrid[row][col]->setType(selectedAgent->get_power());
+            hexGrid[row][col]->update();
+
+            selectedAgent->hide();
+            selectedAgent = nullptr;
+
+            turnTimer->stop();
+            switchPlayer();
+
+
+        }
+}
+
+void game_page::handleAgentClick(agent* clickedAgent) {
+    agentSelected(clickedAgent);
+}
