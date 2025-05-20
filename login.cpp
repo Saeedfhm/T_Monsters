@@ -133,16 +133,14 @@ void login::on_game_btn_clicked()
 
 void login::onItemClicked(QListWidgetItem *item){
     QString name = item->text();
-    add_agent(name);
-}
-
-void login::add_agent(QString name){
-    if(gp->a_size() < 10 && gp->a_size() + 1 != 11){
-        if(gp->a_size() < 5 && gp->a_size() + 1 != 5){
+    if(gp->a_size() < 10 && gp->a_size() + 1 != 10){
+        if(gp->a_size() < 4){
           statusLabel->setText("Turn Player 1");
         }else statusLabel->setText("Turn Player 2");
         gp->set_agents_name(name);
-    }else{
+    }
+    else if(gp->a_size() + 1 == 10){
+        gp->set_agents_name(name);
         this->hide();
         gp->show();
     }
