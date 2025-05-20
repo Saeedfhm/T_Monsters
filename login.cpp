@@ -100,7 +100,8 @@ login::login(QWidget *parent) :
 
     agentslist->hide();
 
-
+    statusLabel->setStyleSheet("color: green; font-size: 16px; background-color: transparent;");
+    statusLabel->move(500 , 200);
 }
 
 login::~login()
@@ -125,15 +126,23 @@ void login::on_game_btn_clicked()
 
     agentslist->move(500 , 300);
 
+    statusLabel->show();
+
     gp->set_name(p1,p2);
 }
 
 void login::onItemClicked(QListWidgetItem *item){
     QString name = item->text();
-    if(gp->a_size() < 5){
+    add_agent(name);
+}
+
+void login::add_agent(QString name){
+    if(gp->a_size() < 10 && gp->a_size() + 1 != 10){
+        if(gp->a_size() < 5 && gp->a_size() + 1 != 5){
+          statusLabel->setText("Turn Player 1");
+        }else statusLabel->setText("Turn Player 2");
         gp->set_agents_name(name);
-    }
-    else{
+    }else{
         this->hide();
         gp->show();
     }

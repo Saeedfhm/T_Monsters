@@ -5,6 +5,7 @@
 #include "game_page.h"
 #include "agent.h"
 #include "waterwalking.h"
+#include <QLabel>
 namespace Ui {
 class login;
 }
@@ -30,6 +31,8 @@ private:
     game_page *gp;
     QListWidget* agentslist;
     QVector <agent *> agents;
+    QLabel* statusLabel = new QLabel(this);
+
 
 };
 
