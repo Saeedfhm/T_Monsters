@@ -7,6 +7,7 @@
 #include "hexagonitem.h"
 #include "agent.h"
 #include <QVector>
+#include <QListWidgetItem>
 
 struct HexData {
     hexagonitem* hexItem;
@@ -32,6 +33,13 @@ public:
     void handleHexagonClick(int row, int col);
     void handleAgentClick(agent* clickedAgent);
 
+    void add_agent();
+
+    int selected_agent_count;
+
+    void set_agents_name(QString agents);
+    int a_size();
+
     ~game_page();
 
 private slots:
@@ -39,6 +47,7 @@ private slots:
     void on_load_game_btn_clicked();
     void updateTimer();
     void agentSelected(agent* selected);
+
 private:
     int hrows;
     int hcols;
@@ -50,6 +59,9 @@ private:
     QTimer *turnTimer;
     int timeRemaining;
     agent *selectedAgent;
+    QVector<agent*> p1_a;
+    QVector<agent*> p2_a;
+    QVector<QString> agents_name;
     hexagonitem *targetHex;
 };
 

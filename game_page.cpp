@@ -12,6 +12,9 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <QFileDialog>
+#include <QGraphicsProxyWidget>
+#include <waterwalking.h>
+#include "agent.h"
 
 game_page::game_page(QWidget *parent) :
     QMainWindow(parent),
@@ -24,38 +27,42 @@ game_page::game_page(QWidget *parent) :
 
     ui->setupUi(this);
 
-        ui->start_game->setFixedSize(100, 50); // عرض: 100 پیکسل، ارتفاع: 50 پیکسل
-        ui->start_game->setStyleSheet(
-            "QPushButton {"
-            "   border-radius: 15px;"
-            "   background-color: #4CAF50;"
-            "   padding: 8px;"
-            "   color: white;"
-            "   font: 75 25pt C059;"
-            "}"
-        );
+    ui->start_game->setFixedSize(100, 50); // عرض: 100 پیکسل، ارتفاع: 50 پیکسل
+    ui->start_game->setStyleSheet(
+       "QPushButton {"
+       "   border-radius: 15px;"
+       "   background-color: #4CAF50;"
+       "   padding: 8px;"
+       "   color: white;"
+       "   font: 75 25pt C059;"
+       "}"
+    );
 
-        ui->load_game_btn->setFixedSize(100, 50); // عرض: 100 پیکسل، ارتفاع: 50 پیکسل
-        ui->load_game_btn->setStyleSheet(
-            "QPushButton {"
-            "   border-radius: 15px;"
-            "   background-color: #4CAF50;"
-            "   padding: 8px;"
-            "   color: white;"
-            "   font: 75 25pt C059;"
-            "}"
-        );
+    ui->load_game_btn->setFixedSize(100, 50); // عرض: 100 پیکسل، ارتفاع: 50 پیکسل
+    ui->load_game_btn->setStyleSheet(
+        "QPushButton {"
+        "   border-radius: 15px;"
+        "   background-color: #4CAF50;"
+        "   padding: 8px;"
+        "   color: white;"
+        "   font: 75 25pt C059;"
+        "}"
+    );
 
-        ui->vw1->setRenderHint(QPainter::Antialiasing);
-        ui->vw1->setScene(scene);
-        currentPlayer = 1;
-        timeRemaining = 2 * 60; // 5 دقیقه
-        selectedAgent = nullptr;
-        targetHex = nullptr;
+    ui->vw1->setRenderHint(QPainter::Antialiasing);
+    ui->vw1->setScene(scene);
+    currentPlayer = 1;
+    timeRemaining = 2 * 60; // 5 دقیقه
+    selectedAgent = nullptr;
+    targetHex = nullptr;
 
-       turnTimer = new QTimer(this);
-       connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
-       startPlayerTurn();
+   turnTimer = new QTimer(this);
+   connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
+   startPlayerTurn();
+
+//   QGraphicsProxyWidget* proxy = scene->addWidget(agentslist);
+//   proxy->setPos(50, 50);
+
 }
 
 game_page::~game_page()
@@ -64,54 +71,142 @@ game_page::~game_page()
 }
 
 
-void game_page::create_agent() {
 
+void game_page::add_agent(){
+    for(int i = 0; i < agents_name.size(); i++){
+         QString name = agents_name[i];
+        if (name.isEmpty()) return;
+        agent* a = nullptr;
 
-    qreal aSize = 40;
-
-    for (int row = 0; row < 4; ++row) {
-                for (int col = 0; col < 1; ++col) {
-                    qreal x = col * aSize * 1.5;
-                    qreal y = aSize * (row ) * 1.5+110;
-                    int aType = 1;
-                    agent* a = new agent(aSize, aType, this);
-                    int apow = row+7;
-                    a->set_power(apow);
-                    QColor acolor = a->getBaseColor();
-                    a->setPos(x, y);
-                    scene->addItem(a);
-                    a->setBrush(acolor);
-                    a->setPen(QPen(Qt::black, 1));
-                    a->Set_aishighlight(false);
-                    a->Set_aRow(row);
-                    a->Set_aCol(col);
-                    a->Set_IsAselected(false);
-                    a->setAcceptHoverEvents(true);
-                }
-            }
-
-    for (int row = 0; row < 4; ++row) {
-            for (int col = 0; col < 1; ++col) {
-                qreal x = col * aSize * 1.5+840;
-                qreal y = aSize * (row ) * 1.5+110;
-                int aType = 1;
-                agent* a2 = new agent(aSize, aType, this);
-                int apow = row+7;
-                 a2->set_power(apow);
-                QColor acolor = a2->getBaseColor();
-                a2->setPos(x, y);
-                scene->addItem(a2);
-                a2->setBrush(acolor);
-                a2->setPen(QPen(Qt::black, 1));
-                a2->Set_aishighlight(false);
-                a2->Set_aRow(row);
-                a2->Set_aCol(col);
-                a2->setFlag(QGraphicsItem::ItemIsMovable);
-                a2->Set_IsAselected(false);
-                a2->setAcceptHoverEvents(true);
-            }
+        if (name == "Billy") {
+            a = new Waterwalking("Billy", 40, 1,this);
+            a->set_Hp(320);
+            a->set_Mobility(3);
+            a->set_Damage(90);
+            a->set_AttackRange(1);
         }
+        else if (name == "Reketon") {
+            a = new Waterwalking("Reketon", 40, 1,this);
+            a->set_Hp(320);
+            a->set_Mobility(3);
+            a->set_Damage(90);
+            a->set_AttackRange(1);
+        }
+        else if (name == "Angus") {
+            a = new Waterwalking("Angus", 40, 1,this);
+            a->set_Hp(320);
+            a->set_Mobility(3);
+            a->set_Damage(90);
+            a->set_AttackRange(1);
+        }
+        else if (name == "Duraham") {
+            a = new Waterwalking("Duraham", 40, 1,this);
+            a->set_Hp(320);
+            a->set_Mobility(3);
+            a->set_Damage(90);
+            a->set_AttackRange(1);
+        }
+
+        else if (name == "Colonel Baba") {
+            a = new Waterwalking("Colonel Baba", 40, 1,this);
+            a->set_Hp(320);
+            a->set_Mobility(3);
+            a->set_Damage(90);
+            a->set_AttackRange(1);
+        }
+
+        else if (name == "Salamander") {
+            a = new Waterwalking("Salamander", 40, 1,this);
+            a->set_Hp(320);
+            a->set_Mobility(3);
+            a->set_Damage(90);
+            a->set_AttackRange(1);
+           }
+
+        else if (name == "Turtle") {
+            a = new Waterwalking("Turtle", 40, 1,this);
+            a->set_Hp(320);
+            a->set_Mobility(3);
+            a->set_Damage(90);
+            a->set_AttackRange(1);
+        }
+
+        else if (name == "Gecko") {
+            a = new Waterwalking("Gecko", 40, 1,this);
+            a->set_Hp(320);
+            a->set_Mobility(3);
+            a->set_Damage(90);
+            a->set_AttackRange(1);
+        }
+
+
+        else {
+            QMessageBox::warning(this, "خطا", "این agent شناخته‌شده نیست.");
+            return;
+        }
+        qreal asize = 36;
+        p1_a.append(a);
+        qreal x = 0;
+        qreal y = asize * (i) * 1.5+110;
+        a->setPos(x, y);
+        QColor acolor = a->getBaseColor();
+        a->setBrush(acolor);
+        a->set_aname(name);
+        scene->addItem(a);
+    }
+
+
 }
+
+
+//void game_page::create_agent() {
+
+
+//    qreal aSize = 40;
+
+//    for (int row = 0; row < 4; ++row) {
+//                for (int col = 0; col < 1; ++col) {
+//                    qreal x = col * aSize * 1.5;
+//                    qreal y = aSize * (row ) * 1.5+110;
+//                    int aType = 1;
+//                    agent* a = new agent(aSize, aType, this);
+//                    int apow = row+7;
+//                    a->set_power(apow);
+//                    QColor acolor = a->getBaseColor();
+//                    a->setPos(x, y);
+//                    scene->addItem(a);
+//                    a->setBrush(acolor);
+//                    a->setPen(QPen(Qt::black, 1));
+//                    a->Set_aishighlight(false);
+//                    a->Set_aRow(row);
+//                    a->Set_aCol(col);
+//                    a->Set_IsAselected(false);
+//                    a->setAcceptHoverEvents(true);
+//                }
+//            }
+
+//    for (int row = 0; row < 4; ++row) {
+//            for (int col = 0; col < 1; ++col) {
+//                qreal x = col * aSize * 1.5+840;
+//                qreal y = aSize * (row ) * 1.5+110;
+//                int aType = 1;
+//                agent* a2 = new agent(aSize, aType, this);
+//                int apow = row+7;
+//                 a2->set_power(apow);
+//                QColor acolor = a2->getBaseColor();
+//                a2->setPos(x, y);
+//                scene->addItem(a2);
+//                a2->setBrush(acolor);
+//                a2->setPen(QPen(Qt::black, 1));
+//                a2->Set_aishighlight(false);
+//                a2->Set_aRow(row);
+//                a2->Set_aCol(col);
+//                a2->setFlag(QGraphicsItem::ItemIsMovable);
+//                a2->Set_IsAselected(false);
+//                a2->setAcceptHoverEvents(true);
+//            }
+//        }
+//}
 
 void game_page::create_board(){
 
@@ -171,19 +266,6 @@ void game_page::create_board(){
 
 void game_page::parse(){
 
-
-
-
-//    fgrid.resize(HEX_ROWS);
-
-
-//    for (int row = 0; row < HEX_ROWS; ++row) {
-//        fgrid[row].resize(HEX_COLS);
-//        for (int col = 0; col < HEX_COLS; ++col) {
-//            fgrid[row][col]= ' ';
-//        }
-//    }
-
     QString filepath = QFileDialog::getOpenFileName(this, "Select a File", "", "Text Files (*.txt);;All Files (*)");
     QFile file(filepath);
 
@@ -215,8 +297,8 @@ void game_page::parse(){
 
 
      for (int row = 0; row < hrows; ++row) {
-         fgrid[row].resize(hcols);
-         for (int col = 0; col < hcols; ++col) {
+         fgrid[row].resize(5);
+         for (int col = 0; col < 5; ++col) {
              fgrid[row][col]= ' ';
          }
      }
@@ -246,9 +328,8 @@ void game_page::parse(){
           row++;
           i +=2 ;
      }
-
-    create_board();
-    create_agent();
+      create_board();
+      add_agent();
  }
 
 void game_page::set_name(const QString &name1, const QString & name2){
@@ -345,7 +426,15 @@ void game_page::handleHexagonClick(int row, int col) {
 
         }
 }
+int game_page::a_size(){
+    return agents_name.size();
+}
 
 void game_page::handleAgentClick(agent* clickedAgent) {
     agentSelected(clickedAgent);
 }
+
+void game_page::set_agents_name(QString name){
+    agents_name.append(name);
+}
+

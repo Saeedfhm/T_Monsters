@@ -8,6 +8,7 @@
 #include <QPolygonF>
 #include <QPointF>
 #include <QtMath>
+#include <QString>
 #include "hexagonitem.h"
 class game_page;
 
@@ -16,15 +17,31 @@ const int AGENT_HEIGHT = 510;
 const int AGENT_COLS = 3;
 const int AGENT_ROWS = 4;
 
-class agent: public QObject, public QGraphicsPolygonItem{
+class agent: public QObject, public QGraphicsPolygonItem
+{
+     Q_OBJECT
 public:
-    agent(qreal size, int type, game_page* gamePage, QGraphicsItem *parent = nullptr);
+    agent(QString, qreal size, int type, game_page* gamePage,QGraphicsItem *parent = nullptr);
 
      QColor getBaseColor() const;
      void setHighlight(bool highlight);
 
      void set_null();
 
+     void set_Name(QString);
+     QString Get_Name();
+
+     void set_Hp(int);
+     int Get_Hp();
+
+     void set_Mobility(int);
+     int Get_Mobility();
+
+     void set_Damage(int);
+     int Get_Damage();
+
+     void set_AttackRange(int);
+     int Get_AttackRange();
 
      void set_power(int);
      int get_power();
@@ -41,6 +58,12 @@ public:
      void Set_aCol(int);
      int Get_aCol();
 
+     virtual bool walk_ground();
+     virtual bool walk_water();
+     virtual bool stay_ground();
+     virtual bool stay_water();
+
+     void set_aname(QString n) { a_name = n; }
 
 signals:
     void clicked(agent* self);
@@ -52,6 +75,12 @@ protected:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
+    QString name;
+    int HP;
+    int Mobility;
+    int Damage;
+    int AttackRange;
+
 private:
 
     int a_row;
@@ -62,6 +91,11 @@ private:
     qreal a_size;
     int a_type;
     QChar color;
+    QString a_name;
+
+   QPixmap pixmap;
+
+
     game_page* m_gamePage;
 
 };

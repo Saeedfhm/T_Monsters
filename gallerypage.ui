@@ -14,30 +14,245 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QWidget" name="widget" native="true">
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <item alignment="Qt::AlignLeft|Qt::AlignTop">
-          <widget class="QPushButton" name="back_btn">
-           <property name="text">
-            <string>back</string>
-           </property>
-          </widget>
-         </item>
-         <item alignment="Qt::AlignHCenter|Qt::AlignTop">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Gallery page</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <widget class="QLabel" name="Billy">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Reketon">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Angus">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Duraham">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="ColonelBaba">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Medusa">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Bunka">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Sanka">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
        </widget>
       </item>
      </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QLabel" name="Sirlimok">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Kabu">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Rajakal">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Salih">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Khan">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Boi">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Eloi">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="kanar">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QLabel" name="Elsa">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Karissa">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Sirphilph">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Frost">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Tusk">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Rambu">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Sabrina">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Death">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Preferred</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>

@@ -9,18 +9,21 @@
 #include <QPropertyAnimation>
 #include <QGraphicsItem>
 #include <QPen>
+#include <QPainter>
 #include "game_page.h"
 
 
-agent::agent(qreal size, int type, game_page* gamePage, QGraphicsItem *parent)
-    : QGraphicsPolygonItem(parent),
+agent::agent(QString n , qreal size, int type, game_page* gamePage, QGraphicsItem *parent)
+    :   QObject(),
+        QGraphicsPolygonItem(parent),
+        name(n),
         a_size(size),
         a_type(type),
         m_gamePage(gamePage)
 {
     QPolygonF rec;
-    for (int i = 0; i < 4; ++i) {
-            qreal angle = 90 * i +45;
+    for (int i = 0; i < 6; ++i) {
+            qreal angle = 60 * i ;
             qreal x = a_size * qCos(qDegreesToRadians(angle));
             qreal y = a_size * qSin(qDegreesToRadians(angle));
             rec << QPointF(x, y);
@@ -51,6 +54,21 @@ void agent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
         QPen pen(Qt::red, 3);
         painter->setPen(pen);
         painter->drawPolygon(polygon());
+    }
+
+
+    QGraphicsPolygonItem::paint(painter, option, widget);
+
+        // بعد نقاشی تصویر وسط چندضلعی
+    if (!pixmap.isNull()) {
+        QRectF bounds = polygon().boundingRect();
+        QSizeF size = bounds.size() * 0.7;
+        QPointF pos = bounds.center() - QPointF(size.width()/2, size.height()/2);
+        QRectF target(pos, size);
+
+        painter->drawPixmap(target, pixmap, pixmap.rect());
+        painter->drawText(bounds, Qt::AlignCenter, a_name);
+
     }
 }
 
@@ -99,21 +117,52 @@ bool agent::Get_IsAselected(){
 }
 
 
+
+void agent::set_Hp(int h){
+    HP = h;
+}
+
+void agent::set_Mobility(int m){
+    Mobility = m;
+}
+
+void agent::set_Damage(int D){
+    Damage = D;
+}
+
+void agent::set_AttackRange(int a){
+    AttackRange = a;
+}
+
+int agent::Get_AttackRange(){
+    return AttackRange;
+}
+
+
+bool agent::walk_ground(){
+    return true;
+}
+bool  agent::walk_water(){
+    return true;
+}
+bool  agent::stay_ground(){
+    return true;
+}
+bool  agent::stay_water(){
+    return true;
+}
+
+
+
+
+
+
 QColor agent::getBaseColor() const
 {
-    switch(power) {
+    switch(Mobility) {
         case 1: return QColor(0, 128, 0);//Qt::green;
         case 2: return QColor(205, 234, 34);
         case 3: return QColor(0, 100, 158);
-        case 4: return QColor(160, 60, 60);
-        case 5: return QColor(0, 128, 0);//Qt::green;
-        case 6: return QColor(205, 134, 134);
-        case 7: return QColor(50, 100, 18);
-        case 8: return QColor(60, 60, 160);
-        case 9: return QColor(0, 128, 250);//Qt::green;
-        case 10: return QColor(205, 34, 134);
-        case 11: return QColor(0, 0, 158);
-        case 12: return QColor(60, 60, 60);
         default: return QColor(100, 100, 100);
     }
 }

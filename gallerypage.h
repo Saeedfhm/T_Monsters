@@ -2,12 +2,14 @@
 #define GALLERYPAGE_H
 
 #include <QMainWindow>
+#include <QObject>
+#include <QGraphicsPolygonItem>
 
 namespace Ui {
 class gallerypage;
 }
 
-class gallerypage : public QMainWindow
+class gallerypage :public  QMainWindow
 {
     Q_OBJECT
 
@@ -20,8 +22,6 @@ private slots:
 
 private:
     Ui::gallerypage *ui;
-
-
 };
 
 #endif // GALLERYPAGE_H

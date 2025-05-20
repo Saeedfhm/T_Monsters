@@ -19,7 +19,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QWidget" name="" native="true">
+     <widget class="QWidget" name="widget" native="true">
       <property name="styleSheet">
        <string notr="true">background: none;
 background-color: transparent;</string>
@@ -241,6 +241,13 @@ border-radius: 15px;</string>
               </widget>
              </item>
              <item>
+              <widget class="QPushButton" name="pushButton">
+               <property name="text">
+                <string>Add agent</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QPushButton" name="start_game">
                <property name="minimumSize">
                 <size>
@@ -281,6 +288,13 @@ border-radius: 45px;</string>
                      <number>1</number>
                     </property>
                     <item>
+                     <widget class="QLabel" name="Message">
+                      <property name="text">
+                       <string>TextLabel</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
                      <widget class="QLabel" name="player1Timer">
                       <property name="styleSheet">
                        <string notr="true">font: 24pt &quot;MS Shell Dlg 2&quot;;
@@ -312,31 +326,6 @@ border-radius: 45px;</string>
                     </item>
                    </layout>
                   </widget>
-                 </item>
-                 <item>
-                  <layout class="QVBoxLayout" name="verticalLayout_3">
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="Message">
-                     <property name="font">
-                      <font>
-                       <pointsize>14</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>TextLabel</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
                  </item>
                 </layout>
                </item>

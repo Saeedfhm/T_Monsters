@@ -2,6 +2,27 @@
     <qresource prefix="/">
         <file>077268.jpg</file>
         <file>b1.png</file>
+        <file>Billy.webp</file>
+        <file>Reketon.webp</file>
+        <file>Bunka.webp</file>
+        <file>Colonel_baba.webp</file>
+        <file>Duraham.webp</file>
+        <file>Medusa.webp</file>
+        <file>Sanka.webp</file>
+        <file>Angus.webp</file>
+        <file>Kabu.webp</file>
+        <file>Kanar.webp</file>
+        <file>Karissa.webp</file>
+        <file>Khan.webp</file>
+        <file>Lamorak.webp</file>
+        <file>Rajakal.webp</file>
+        <file>Boi.webp</file>
+        <file>Eloi.webp</file>
+        <file>Elsa.webp</file>
+        <file>Sabrina.webp</file>
+        <file>Salih.webp</file>
+        <file>Sir philiph.webp</file>
+        <file>Tusk.webp</file>
     </qresource>
     <qresource prefix="/new/background">
         <file>image/background/16_07_55_raw.jpg</file>

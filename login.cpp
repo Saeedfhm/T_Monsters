@@ -2,14 +2,61 @@
 #include "ui_login.h"
 #include "mainwindow.h"
 #include "game_page.h"
-
+#include <QListWidgetItem>
 login::login(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::login)
 {
     ui->setupUi(this);
-
     ui->game_btn->setFixedSize(80, 30); // عرض: 100 پیکسل، ارتفاع: 50 پیکسل
+
+    agentslist = new QListWidget(this);
+
+    agentslist->addItem("Billy");
+    agentslist->addItem("Reketon");
+    agentslist->addItem("Angus");
+    agentslist->addItem("Duraham");
+    agentslist->addItem("Colonel Baba");
+    agentslist->addItem("Medusa");
+    agentslist->addItem("Bunka");
+    agentslist->addItem("Sanka");
+    agentslist->addItem("Sir Lamorak");
+    agentslist->addItem("Kabu");
+    agentslist->addItem("Salih");
+    agentslist->addItem("Khan");
+    agentslist->addItem("Boi");
+    agentslist->addItem("Eloi");
+    agentslist->addItem("Kanar");
+    agentslist->addItem("Elsa");
+    agentslist->addItem("Karissa");
+    agentslist->addItem("Sir Philip");
+    agentslist->addItem("Frost");
+    agentslist->addItem("Tusk");
+    agentslist->addItem("Rambu");
+    agentslist->addItem("Sabrina");
+    agentslist->addItem("Death");
+
+    agentslist->setStyleSheet(R"(
+        QListWidget {
+            background-color: #00aa00;         /* رنگ پس‌زمینه */
+            color: #eee;                    /* رنگ متن */
+            font-size: 16px;                /* اندازه فونت */
+            border: 2px solid #555;         /* حاشیه */
+            border-radius: 8px;             /* گرد کردن گوشه‌ها */
+        }
+        QListWidget::item {
+            padding: 10px;                  /* فاصله داخلی هر آیتم */
+            border-bottom: 1px solid #444; /* خط جداکننده آیتم‌ها */
+        }
+        QListWidget::item:selected {
+            background-color: #005500;  /* سبز تیره‌تر وقتی انتخاب شده */
+            color: white;
+            font-weight: bold;
+        }
+        QListWidget::item:hover {
+            background-color: #009900;         /* رنگ پس‌زمینه هنگام هاور */
+        }
+    )");
 
 
     ui->game_btn->setStyleSheet(
@@ -47,7 +94,12 @@ login::login(QWidget *parent) :
         "}"
     );
 
+    connect(agentslist, &QListWidget::itemClicked, this, &login::onItemClicked);
+
     gp = new game_page (this);
+
+    agentslist->hide();
+
 
 }
 
@@ -56,23 +108,34 @@ login::~login()
     delete ui;
 }
 
-//void login::on_game_btn_clicked()
-//{
-//    hide();
-//    MainWindow *m = new MainWindow ();
-//    m->show();
-//}
-
-//font: 75 italic 31pt "Z003";
-//color: rgb(165, 29, 45);
-
 void login::on_game_btn_clicked()
 {
-    hide();
+
     QString p1 = ui->P1_name->text();
     QString p2 = ui->P2_name->text();
+    ui->widget->hide();
+    agentslist->setWindowTitle("Agent List");
+    agentslist->resize(300, 400);
+
+    QVBoxLayout *layout = new QVBoxLayout(agentslist);
+
+    agentslist->setLayout(layout);
+
+    agentslist->show();
+
+    agentslist->move(500 , 300);
+
     gp->set_name(p1,p2);
-    gp->show();
-
-
 }
+
+void login::onItemClicked(QListWidgetItem *item){
+    QString name = item->text();
+    if(gp->a_size() < 5){
+        gp->set_agents_name(name);
+    }
+    else{
+        this->hide();
+        gp->show();
+    }
+}
+

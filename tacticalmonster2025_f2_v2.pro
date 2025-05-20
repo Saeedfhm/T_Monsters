@@ -25,6 +25,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    floating.cpp \
+    flying.cpp \
+    grounded.cpp \
         main.cpp \
         mainwindow.cpp \
     second.cpp \
@@ -32,16 +35,21 @@ SOURCES += \
     login.cpp \
     game_page.cpp \
     hexagonitem.cpp \
-    agent.cpp
+    agent.cpp \
+    waterwalking.cpp
 
 HEADERS += \
+    floating.h \
+    flying.h \
+    grounded.h \
         mainwindow.h \
     second.h \
     gallerypage.h \
     login.h \
     game_page.h \
     hexagonitem.h \
-    agent.h
+    agent.h \
+    waterwalking.h
 
 FORMS += \
         mainwindow.ui \
