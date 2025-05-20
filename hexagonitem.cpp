@@ -25,9 +25,6 @@ QColor typeToColor(int type) {
         default: return QColor(100, 100, 100);
     }
 }
-
-//hexagonitem::hexagonitem(qreal size, int type, QGraphicsItem *parent)
-
 hexagonitem::hexagonitem(qreal size, int type, game_page* gamePage, QGraphicsItem *parent)
     : QGraphicsPolygonItem(parent),  
     m_gamePage(gamePage),
@@ -170,7 +167,6 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
       painter->setPen(QPen(Qt::white, 1));
       painter->drawPolygon(polygon());
 
-      // تعیین متن بر اساس نوع
        QString text;
        switch(m_type) {
            case 1: text = "1"; break;

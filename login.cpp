@@ -137,7 +137,7 @@ void login::onItemClicked(QListWidgetItem *item){
 }
 
 void login::add_agent(QString name){
-    if(gp->a_size() < 10 && gp->a_size() + 1 != 10){
+    if(gp->a_size() < 10 && gp->a_size() + 1 != 11){
         if(gp->a_size() < 5 && gp->a_size() + 1 != 5){
           statusLabel->setText("Turn Player 1");
         }else statusLabel->setText("Turn Player 2");

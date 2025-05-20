@@ -63,6 +63,7 @@ private:
     QVector<agent*> p2_a;
     QVector<QString> agents_name;
     hexagonitem *targetHex;
+    int type;
 };
 
 #endif // GAME_PAGE_H

@@ -14,6 +14,9 @@
 #include <QFileDialog>
 #include <QGraphicsProxyWidget>
 #include <waterwalking.h>
+#include <grounded.h>
+#include <flying.h>
+#include <floating.h>
 #include "agent.h"
 
 game_page::game_page(QWidget *parent) :
@@ -59,10 +62,6 @@ game_page::game_page(QWidget *parent) :
    turnTimer = new QTimer(this);
    connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
    startPlayerTurn();
-
-//   QGraphicsProxyWidget* proxy = scene->addWidget(agentslist);
-//   proxy->setPos(50, 50);
-
 }
 
 game_page::~game_page()
@@ -73,81 +72,234 @@ game_page::~game_page()
 
 
 void game_page::add_agent(){
-    for(int i = 0; i < 5; i++){
+
+    int j = 0;
+
+    for(int i = 0; i < agents_name.size(); i++){
          QString name = agents_name[i];
         if (name.isEmpty()) return;
         agent* a = nullptr;
 
+        if(i < 5) {
+            type = 1;
+        }
+        else {
+            type = 2;
+        }
+
+        // ------------------- waterwalking agents --------------------
+
         if (name == "Billy") {
-            a = new Waterwalking("Billy", 36, 1,this);
+            a = new Waterwalking("Billy", 36, type,this);
             a->set_Hp(320);
             a->set_Mobility(3);
             a->set_Damage(90);
             a->set_AttackRange(1);
         }
         else if (name == "Reketon") {
-            a = new Waterwalking("Reketon", 36, 1,this);
+            a = new Waterwalking("Reketon", 36, type,this);
             a->set_Hp(320);
-            a->set_Mobility(3);
-            a->set_Damage(90);
-            a->set_AttackRange(1);
+            a->set_Mobility(2);
+            a->set_Damage(80);
+            a->set_AttackRange(2);
         }
         else if (name == "Angus") {
-            a = new Waterwalking("Angus", 36, 1,this);
-            a->set_Hp(320);
-            a->set_Mobility(3);
-            a->set_Damage(90);
+            a = new Waterwalking("Angus", 36, type,this);
+            a->set_Hp(400);
+            a->set_Mobility(2);
+            a->set_Damage(100);
             a->set_AttackRange(1);
         }
         else if (name == "Duraham") {
-            a = new Waterwalking("Duraham", 36, 1,this);
+            a = new Waterwalking("Duraham", 36, type,this);
             a->set_Hp(320);
-            a->set_Mobility(3);
-            a->set_Damage(90);
-            a->set_AttackRange(1);
+            a->set_Mobility(2);
+            a->set_Damage(100);
+            a->set_AttackRange(2);
         }
 
         else if (name == "Colonel Baba") {
-            a = new Waterwalking("Colonel Baba", 36, 1,this);
-            a->set_Hp(320);
-            a->set_Mobility(3);
-            a->set_Damage(90);
+            a = new Waterwalking("Colonel Baba", 36, type,this);
+            a->set_Hp(400);
+            a->set_Mobility(2);
+            a->set_Damage(100);
             a->set_AttackRange(1);
         }
 
-        else if (name == "Salamander") {
-            a = new Waterwalking("Salamander", 40, 1,this);
+        else if (name == "Medusa") {
+            a = new Waterwalking("Medusa", 36, type,this);
             a->set_Hp(320);
-            a->set_Mobility(3);
+            a->set_Mobility(2);
             a->set_Damage(90);
-            a->set_AttackRange(1);
+            a->set_AttackRange(2);
            }
 
-        else if (name == "Turtle") {
-            a = new Waterwalking("Turtle", 40, 1,this);
+        else if (name == "Bunka") {
+            a = new Waterwalking("Bunka", 36, type,this);
             a->set_Hp(320);
             a->set_Mobility(3);
+            a->set_Damage(100);
+            a->set_AttackRange(1);
+        }
+
+        else if (name == "Sanka") {
+            a = new Waterwalking("Sanka", 36, type,this);
+            a->set_Hp(320);
+            a->set_Mobility(3);
+            a->set_Damage(100);
+            a->set_AttackRange(1);
+        }
+        // ------------------ grounded agents ---------------------
+        else if (name == "Sir Lamorak") {
+            a = new grounded("Sir Lamorak", 36, type,this);
+            a->set_Hp(320);
+            a->set_Mobility(3);
+            a->set_Damage(110);
+            a->set_AttackRange(1);
+        }
+
+        else if (name == "Kabu") {
+            a = new grounded("Kabu", 36, type,this);
+            a->set_Hp(400);
+            a->set_Mobility(2);
+            a->set_Damage(120);
+            a->set_AttackRange(1);
+        }
+
+        else if (name == "Rajakal") {
+            a = new grounded("Rajakal", 36, type,this);
+            a->set_Hp(320);
+            a->set_Mobility(2);
+            a->set_Damage(130);
+            a->set_AttackRange(1);
+        }
+
+        else if (name == "Salih") {
+            a = new grounded("Salih", 36, type,this);
+            a->set_Hp(400);
+            a->set_Mobility(2);
+            a->set_Damage(80);
+            a->set_AttackRange(1);
+        }
+
+        else if (name == "Khan") {
+            a = new grounded("Khan", 36, type,this);
+            a->set_Hp(320);
+            a->set_Mobility(2);
             a->set_Damage(90);
             a->set_AttackRange(1);
         }
 
-        else if (name == "Gecko") {
-            a = new Waterwalking("Gecko", 40, 1,this);
-            a->set_Hp(320);
-            a->set_Mobility(3);
-            a->set_Damage(90);
+        else if (name == "Boi") {
+            a = new grounded("Boi", 36, type,this);
+            a->set_Hp(400);
+            a->set_Mobility(2);
+            a->set_Damage(100);
             a->set_AttackRange(1);
         }
 
+        else if (name == "Eloi") {
+            a = new grounded("Eloi", 36, type,this);
+            a->set_Hp(240);
+            a->set_Mobility(2);
+            a->set_Damage(100);
+            a->set_AttackRange(2);
+        }
+
+        else if (name == "Kanar") {
+            a = new grounded("Kanar", 36, type,this);
+            a->set_Hp(160);
+            a->set_Mobility(2);
+            a->set_Damage(100);
+            a->set_AttackRange(2);
+        }
+
+        else if (name == "Elsa") {
+            a = new grounded("Elsa", 36, type,this);
+            a->set_Hp(320);
+            a->set_Mobility(2);
+            a->set_Damage(140);
+            a->set_AttackRange(2);
+        }
+
+        else if (name == "Karissa") {
+            a = new grounded("Karissa", 36, type,this);
+            a->set_Hp(280);
+            a->set_Mobility(2);
+            a->set_Damage(80);
+            a->set_AttackRange(2);
+        }
+
+        else if (name == "Sir Philip") {
+            a = new grounded("Sir Philip", 36, type,this);
+            a->set_Hp(400);
+            a->set_Mobility(2);
+            a->set_Damage(100);
+            a->set_AttackRange(1);
+        }
+
+        else if (name == "Frost") {
+            a = new grounded("Frost", 36, type,this);
+            a->set_Hp(260);
+            a->set_Mobility(2);
+            a->set_Damage(80);
+            a->set_AttackRange(2);
+        }
+
+        else if (name == "Tusk") {
+            a = new grounded("Tusk", 36, type,this);
+            a->set_Hp(400);
+            a->set_Mobility(2);
+            a->set_Damage(100);
+            a->set_AttackRange(1);
+        }
+
+        //  ---------------- flying agents ---------------------
+
+        else if (name == "Rambu") {
+            a = new flying("Rambu", 36, type,this);
+            a->set_Hp(320);
+            a->set_Mobility(3);
+            a->set_Damage(120);
+            a->set_AttackRange(1);
+        }
+
+        // ----------------- floating agents --------------------
+
+        else if (name == "Sabrina") {
+            a = new floating("Sabrina", 36, type,this);
+            a->set_Hp(320);
+            a->set_Mobility(3);
+            a->set_Damage(100);
+            a->set_AttackRange(1);
+        }
+
+        else if (name == "Death") {
+            a = new floating("Death", 36, type,this);
+            a->set_Hp(240);
+            a->set_Mobility(3);
+            a->set_Damage(120);
+            a->set_AttackRange(2);
+        }
 
         else {
             QMessageBox::warning(this, "خطا", "این agent شناخته‌شده نیست.");
             return;
         }
-        qreal asize = 36;
-        p1_a.append(a);
+        qreal asize = 40;
         qreal x = 0;
-        qreal y = asize * (i) * 1.5+115;
+        qreal y = 0;
+        if(type==1) {
+            x = 0;
+            y = asize * sqrt(3.0) * (i);
+        }
+        else {
+            x = 840;
+            y = asize * sqrt(3.0) * (j);
+            j++;
+        }
+
+        p1_a.append(a);
         a->setPos(x, y);
         QColor acolor = a->getBaseColor();
         a->setBrush(acolor);
