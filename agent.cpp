@@ -38,38 +38,27 @@ void agent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    QColor color = getBaseColor();
-
-    if (a_isHighlighted) {
-        color = color.lighter(50); // روشن‌تر کردن رنگ هنگام هاور
-    }
-
-    painter->setBrush(color);
-    painter->setPen(QPen(Qt::white, 1));
-
     painter->drawPolygon(polygon());
 
+    if(a_type==1) painter->setPen(QPen(Qt::red, 3));
+    else if(a_type==2) painter->setPen(QPen(Qt::blue, 3));
 
     if (is_selected) {
         QPen pen(Qt::red, 3);
         painter->setPen(pen);
         painter->drawPolygon(polygon());
     }
-
-
     QGraphicsPolygonItem::paint(painter, option, widget);
-    QRectF bounds = polygon().boundingRect();
-        // بعد نقاشی تصویر وسط چندضلعی
-//    if (!pixmap.isNull()) {
-//        QRectF bounds = polygon().boundingRect();
-//        QSizeF size = bounds.size() * 0.7;
-//        QPointF pos = bounds.center() - QPointF(size.width()/2, size.height()/2);
-//        QRectF target(pos, size);
 
-//        painter->drawPixmap(target, pixmap, pixmap.rect());
-//    }
-    painter->setPen(Qt::white);
-    painter->drawText(bounds, Qt::AlignCenter, a_name);
+    QRectF bounds = polygon().boundingRect();
+    if (!pixmap.isNull()) {
+        QPainterPath path;
+        path.addPolygon(polygon());      // محدوده clip را به شکل شش‌ضلعی تعیین می‌کنیم
+        painter->save();
+        painter->setClipPath(path);      // فقط داخل این شکل نقاشی بشه
+        painter->drawPixmap(bounds, pixmap, pixmap.rect()); // کشیدن تصویر روی شش‌ضلعی
+        painter->restore();
+    }
 }
 
 void agent::set_power(int p){

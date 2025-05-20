@@ -95,6 +95,7 @@ void game_page::add_agent(){
             a->set_Mobility(3);
             a->set_Damage(90);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Billy.webp");
         }
         else if (name == "Reketon") {
             a = new Waterwalking("Reketon", 36, type,this);
@@ -102,6 +103,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(80);
             a->set_AttackRange(2);
+            a->set_pixmap(":/Reketon.webp");
         }
         else if (name == "Angus") {
             a = new Waterwalking("Angus", 36, type,this);
@@ -109,6 +111,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(100);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Reketon.webp");
         }
         else if (name == "Duraham") {
             a = new Waterwalking("Duraham", 36, type,this);
@@ -116,6 +119,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(100);
             a->set_AttackRange(2);
+            a->set_pixmap(":/Duraham.webp");
         }
 
         else if (name == "Colonel Baba") {
@@ -124,6 +128,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(100);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Colonel_baba.webp");
         }
 
         else if (name == "Medusa") {
@@ -132,6 +137,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(90);
             a->set_AttackRange(2);
+            a->set_pixmap(":/Medusa.webp");
            }
 
         else if (name == "Bunka") {
@@ -140,6 +146,7 @@ void game_page::add_agent(){
             a->set_Mobility(3);
             a->set_Damage(100);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Bunka.webp");
         }
 
         else if (name == "Sanka") {
@@ -148,6 +155,7 @@ void game_page::add_agent(){
             a->set_Mobility(3);
             a->set_Damage(100);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Sanka.webp");
         }
         // ------------------ grounded agents ---------------------
         else if (name == "Sir Lamorak") {
@@ -156,6 +164,7 @@ void game_page::add_agent(){
             a->set_Mobility(3);
             a->set_Damage(110);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Lamorak.webp");
         }
 
         else if (name == "Kabu") {
@@ -164,6 +173,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(120);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Kabu.webp");
         }
 
         else if (name == "Rajakal") {
@@ -172,6 +182,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(130);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Rajakal.webp");
         }
 
         else if (name == "Salih") {
@@ -180,6 +191,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(80);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Salih.webp");
         }
 
         else if (name == "Khan") {
@@ -188,6 +200,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(90);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Khan.webp");
         }
 
         else if (name == "Boi") {
@@ -196,6 +209,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(100);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Boi.webp");
         }
 
         else if (name == "Eloi") {
@@ -204,6 +218,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(100);
             a->set_AttackRange(2);
+            a->set_pixmap(":/Eloi.webp");
         }
 
         else if (name == "Kanar") {
@@ -212,6 +227,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(100);
             a->set_AttackRange(2);
+            a->set_pixmap(":/Kanar.webp");
         }
 
         else if (name == "Elsa") {
@@ -220,6 +236,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(140);
             a->set_AttackRange(2);
+            a->set_pixmap(":/Elsa.webp");
         }
 
         else if (name == "Karissa") {
@@ -228,6 +245,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(80);
             a->set_AttackRange(2);
+            a->set_pixmap(":/Karissa.webp");
         }
 
         else if (name == "Sir Philip") {
@@ -236,6 +254,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(100);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Sir philiph.webp");
         }
 
         else if (name == "Frost") {
@@ -244,6 +263,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(80);
             a->set_AttackRange(2);
+            a->set_pixmap(":/Tusk.webp");
         }
 
         else if (name == "Tusk") {
@@ -252,6 +272,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(100);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Tusk.webp");
         }
 
         //  ---------------- flying agents ---------------------
@@ -262,6 +283,7 @@ void game_page::add_agent(){
             a->set_Mobility(3);
             a->set_Damage(120);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Tusk.webp");
         }
 
         // ----------------- floating agents --------------------
@@ -272,6 +294,7 @@ void game_page::add_agent(){
             a->set_Mobility(3);
             a->set_Damage(100);
             a->set_AttackRange(1);
+            a->set_pixmap(":/Sabrina.webp");
         }
 
         else if (name == "Death") {
@@ -280,6 +303,8 @@ void game_page::add_agent(){
             a->set_Mobility(3);
             a->set_Damage(120);
             a->set_AttackRange(2);
+            a->set_pixmap(":/Sabrina.webp");
+
         }
 
         else {
@@ -298,16 +323,10 @@ void game_page::add_agent(){
             y = asize * sqrt(3.0) * (j);
             j++;
         }
-
         p1_a.append(a);
         a->setPos(x, y);
-        QColor acolor = a->getBaseColor();
-        a->setBrush(acolor);
-        a->set_aname(name);
         scene->addItem(a);
     }
-
-
 }
 
 void game_page::create_board(){
