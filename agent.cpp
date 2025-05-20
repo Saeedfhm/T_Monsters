@@ -58,18 +58,18 @@ void agent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
 
     QGraphicsPolygonItem::paint(painter, option, widget);
-
+    QRectF bounds = polygon().boundingRect();
         // بعد نقاشی تصویر وسط چندضلعی
-    if (!pixmap.isNull()) {
-        QRectF bounds = polygon().boundingRect();
-        QSizeF size = bounds.size() * 0.7;
-        QPointF pos = bounds.center() - QPointF(size.width()/2, size.height()/2);
-        QRectF target(pos, size);
+//    if (!pixmap.isNull()) {
+//        QRectF bounds = polygon().boundingRect();
+//        QSizeF size = bounds.size() * 0.7;
+//        QPointF pos = bounds.center() - QPointF(size.width()/2, size.height()/2);
+//        QRectF target(pos, size);
 
-        painter->drawPixmap(target, pixmap, pixmap.rect());
-        painter->drawText(bounds, Qt::AlignCenter, a_name);
-
-    }
+//        painter->drawPixmap(target, pixmap, pixmap.rect());
+//    }
+    painter->setPen(Qt::white);
+    painter->drawText(bounds, Qt::AlignCenter, a_name);
 }
 
 void agent::set_power(int p){

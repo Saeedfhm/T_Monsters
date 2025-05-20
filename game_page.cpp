@@ -73,34 +73,34 @@ game_page::~game_page()
 
 
 void game_page::add_agent(){
-    for(int i = 0; i < agents_name.size(); i++){
+    for(int i = 0; i < 5; i++){
          QString name = agents_name[i];
         if (name.isEmpty()) return;
         agent* a = nullptr;
 
         if (name == "Billy") {
-            a = new Waterwalking("Billy", 40, 1,this);
+            a = new Waterwalking("Billy", 36, 1,this);
             a->set_Hp(320);
             a->set_Mobility(3);
             a->set_Damage(90);
             a->set_AttackRange(1);
         }
         else if (name == "Reketon") {
-            a = new Waterwalking("Reketon", 40, 1,this);
+            a = new Waterwalking("Reketon", 36, 1,this);
             a->set_Hp(320);
             a->set_Mobility(3);
             a->set_Damage(90);
             a->set_AttackRange(1);
         }
         else if (name == "Angus") {
-            a = new Waterwalking("Angus", 40, 1,this);
+            a = new Waterwalking("Angus", 36, 1,this);
             a->set_Hp(320);
             a->set_Mobility(3);
             a->set_Damage(90);
             a->set_AttackRange(1);
         }
         else if (name == "Duraham") {
-            a = new Waterwalking("Duraham", 40, 1,this);
+            a = new Waterwalking("Duraham", 36, 1,this);
             a->set_Hp(320);
             a->set_Mobility(3);
             a->set_Damage(90);
@@ -108,7 +108,7 @@ void game_page::add_agent(){
         }
 
         else if (name == "Colonel Baba") {
-            a = new Waterwalking("Colonel Baba", 40, 1,this);
+            a = new Waterwalking("Colonel Baba", 36, 1,this);
             a->set_Hp(320);
             a->set_Mobility(3);
             a->set_Damage(90);
@@ -147,7 +147,7 @@ void game_page::add_agent(){
         qreal asize = 36;
         p1_a.append(a);
         qreal x = 0;
-        qreal y = asize * (i) * 1.5+110;
+        qreal y = asize * (i) * 1.5+115;
         a->setPos(x, y);
         QColor acolor = a->getBaseColor();
         a->setBrush(acolor);
@@ -157,56 +157,6 @@ void game_page::add_agent(){
 
 
 }
-
-
-//void game_page::create_agent() {
-
-
-//    qreal aSize = 40;
-
-//    for (int row = 0; row < 4; ++row) {
-//                for (int col = 0; col < 1; ++col) {
-//                    qreal x = col * aSize * 1.5;
-//                    qreal y = aSize * (row ) * 1.5+110;
-//                    int aType = 1;
-//                    agent* a = new agent(aSize, aType, this);
-//                    int apow = row+7;
-//                    a->set_power(apow);
-//                    QColor acolor = a->getBaseColor();
-//                    a->setPos(x, y);
-//                    scene->addItem(a);
-//                    a->setBrush(acolor);
-//                    a->setPen(QPen(Qt::black, 1));
-//                    a->Set_aishighlight(false);
-//                    a->Set_aRow(row);
-//                    a->Set_aCol(col);
-//                    a->Set_IsAselected(false);
-//                    a->setAcceptHoverEvents(true);
-//                }
-//            }
-
-//    for (int row = 0; row < 4; ++row) {
-//            for (int col = 0; col < 1; ++col) {
-//                qreal x = col * aSize * 1.5+840;
-//                qreal y = aSize * (row ) * 1.5+110;
-//                int aType = 1;
-//                agent* a2 = new agent(aSize, aType, this);
-//                int apow = row+7;
-//                 a2->set_power(apow);
-//                QColor acolor = a2->getBaseColor();
-//                a2->setPos(x, y);
-//                scene->addItem(a2);
-//                a2->setBrush(acolor);
-//                a2->setPen(QPen(Qt::black, 1));
-//                a2->Set_aishighlight(false);
-//                a2->Set_aRow(row);
-//                a2->Set_aCol(col);
-//                a2->setFlag(QGraphicsItem::ItemIsMovable);
-//                a2->Set_IsAselected(false);
-//                a2->setAcceptHoverEvents(true);
-//            }
-//        }
-//}
 
 void game_page::create_board(){
 
