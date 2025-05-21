@@ -16,6 +16,7 @@ second::second(QWidget *parent) :
 
     ui->gallery_btn->setStyleSheet(
         "QPushButton {"
+        "   background : transparent;"
         "   border-radius: 15px;"
         "   background-color: #4CAF50;"
         "   padding: 8px;"
@@ -27,6 +28,7 @@ second::second(QWidget *parent) :
 
     ui->start_btn->setStyleSheet(
         "QPushButton {"
+        "   background : transparent;"
         "   border-radius: 15px;"
         "   background-color: #4CAF50;"
         "   padding: 8px;"

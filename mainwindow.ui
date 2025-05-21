@@ -6,22 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
-    <height>786</height>
+    <width>1200</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/new/background/image/background/16_07_55_raw.jpg);</string>
+   <string notr="true">background-image: url(:/new/background/image/background/16_07_55_raw.jpg);
+background-image: url(:/new/background/image/background/16_07_55_raw.jpg);
+background-repeat: nor-repeat;
+background-position: center;</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="go_btn">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>680</y>
+      <x>510</x>
+      <y>500</y>
       <width>93</width>
       <height>34</height>
      </rect>
