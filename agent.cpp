@@ -31,10 +31,7 @@ agent::agent(QString n , qreal size, int type, game_page* gamePage, QGraphicsIte
         setPolygon(rec);
         setAcceptHoverEvents(true);
         setFlag(QGraphicsItem::ItemIsSelectable);
-        hover_info_text = new QGraphicsTextItem(this);
-        hover_info_text->setDefaultTextColor(Qt::white);
-        hover_info_text->setVisible(false);
-        hover_info_text->setZValue(10);
+        setupInfoWidget();
 }
 
 QString agent::getInfoText() {
@@ -189,29 +186,54 @@ void agent::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void agent::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-//   setHighlight(true);
-//   setPos(x() - 10, y());
-//   setScale(1.2);
+    info_label->setText(getInfoText());
+    info_label->setWordWrap(true);
+    info_label->adjustSize();
 
-   hover_info_text->setPlainText(getInfoText());
+    QRectF bounds = polygon().boundingRect();
+    QPointF pos = bounds.topRight() + QPointF(10, -10);
+    info_widget_proxy->setPos(pos);
+    info_widget_proxy->setOpacity(0.0);
+    info_widget_proxy->setVisible(true);
 
-   QRectF bounds = polygon().boundingRect();
-   QPointF pos = bounds.topRight() + QPointF(5, -5); // کنار ایجنت
-   hover_info_text->setPos(pos);
 
-   hover_info_text->setVisible(true);
+    fade_anim->stop();
+    fade_anim->setStartValue(0.0);
+    fade_anim->setEndValue(1.0);
+    fade_anim->start();
+    QGraphicsPolygonItem::hoverEnterEvent(event);
+}
 
-   QGraphicsPolygonItem::hoverEnterEvent(event);
+void agent::setupInfoWidget()
+{
+    info_label = new QLabel;
+    info_label->setStyleSheet("QLabel { background-color: rgba(0, 0, 0, 180); color: white; padding: 8px; border-radius: 6px; border-radius: 15px; }");
+    info_label->setFont(QFont("Tahoma", 10));
+    info_label->setAlignment(Qt::AlignLeft);
+    info_label->setWordWrap(true);
+    info_label->setMaximumWidth(220);
+
+    info_widget_proxy = new QGraphicsProxyWidget(this);
+    info_widget_proxy->setWidget(info_label);
+    info_widget_proxy->setVisible(false);
+    info_widget_proxy->setZValue(10);
+
+    fade_anim = new QPropertyAnimation(info_widget_proxy, "opacity");
+    fade_anim->setDuration(300);
 }
 
 void agent::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-//    setHighlight(false);
 
-//    setPos(x() + 10, y());
-//    setScale(1.0);
+    fade_anim->stop();
+    fade_anim->setStartValue(1.0);
+    fade_anim->setEndValue(0.0);
+    fade_anim->start();
 
-    hover_info_text->setVisible(false);
+    connect(fade_anim, &QPropertyAnimation::finished, this, [this]() {
+        if (fade_anim->endValue() == 0.0)
+            info_widget_proxy->setVisible(false);
+    });
 
     QGraphicsPolygonItem::hoverLeaveEvent(event);
 }

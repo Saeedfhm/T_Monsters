@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 
-
+    setFixedSize(1024, 786);
 
     ui->go_btn->setFixedSize(150, 50); // عرض: 100 پیکسل، ارتفاع: 50 پیکسل
 
@@ -17,8 +17,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->go_btn->setStyleSheet(
         "QPushButton {"
         "   border-radius: 15px;"
-        "   background-color: #4CAF50;"
+        "   background: transparent; "
+        "   background-color: #aaa516;"
         "   padding: 8px;"
+        "   color: white"
         "}"
         "QPushButton:hover {"
         "   background-color: #45a049;" /* تغییر رنگ هنگام هاور */

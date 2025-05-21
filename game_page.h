@@ -54,6 +54,7 @@ private:
     int hrows;
     int hcols;
     Ui::game_page *ui;
+    QGraphicsView *graphicsView;
     QGraphicsScene *scene;
     QVector<QVector<hexagonitem*>> hexGrid;
     std::vector<std::vector<QChar>> fgrid;

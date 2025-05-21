@@ -32,8 +32,6 @@ private:
     QListWidget* agentslist;
     QVector <agent *> agents;
     QLabel* statusLabel = new QLabel(this);
-
-
 };
 
 #endif // LOGIN_H

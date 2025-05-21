@@ -28,6 +28,9 @@
         <file>image/background/16_07_55_raw.jpg</file>
         <file>image/background/16_08_06_raw.jpg</file>
         <file>image/background/16_37_22_raw.jpg</file>
+        <file>C:/Users/Admin/Downloads/capsule_616x353.jpg</file>
+        <file>image/background/capsule_616x353.jpg</file>
+        <file>image/background/552x414bb.png</file>
     </qresource>
     <qresource prefix="/new/hero">
         <file>image/heros/hero1.png</file>

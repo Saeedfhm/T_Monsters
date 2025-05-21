@@ -30,7 +30,7 @@ game_page::game_page(QWidget *parent) :
 
     ui->setupUi(this);
 
-    ui->start_game->setFixedSize(100, 50); // عرض: 100 پیکسل، ارتفاع: 50 پیکسل
+    ui->start_game->setFixedSize(100, 50);
     ui->start_game->setStyleSheet(
        "QPushButton {"
        "   border-radius: 15px;"
@@ -41,7 +41,7 @@ game_page::game_page(QWidget *parent) :
        "}"
     );
 
-    ui->load_game_btn->setFixedSize(100, 50); // عرض: 100 پیکسل، ارتفاع: 50 پیکسل
+    ui->load_game_btn->setFixedSize(100, 50);
     ui->load_game_btn->setStyleSheet(
         "QPushButton {"
         "   border-radius: 15px;"
@@ -55,13 +55,13 @@ game_page::game_page(QWidget *parent) :
     ui->vw1->setRenderHint(QPainter::Antialiasing);
     ui->vw1->setScene(scene);
     currentPlayer = 1;
-    timeRemaining = 2 * 60; // 5 دقیقه
+    timeRemaining = 2 * 60;
     selectedAgent = nullptr;
     targetHex = nullptr;
-
-   turnTimer = new QTimer(this);
-   connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
-   startPlayerTurn();
+    ui->vw1->setDragMode(QGraphicsView::NoDrag);
+    turnTimer = new QTimer(this);
+    connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
+    startPlayerTurn();
 }
 
 game_page::~game_page()
@@ -348,7 +348,7 @@ void game_page::create_board(){
     for (int col = 0; col < HEX_COLS; ++col) {
        for (int row = 0; row < HEX_ROWS - (col % 2); ++row) {
              qreal x = col * hexWidth * 0.75*1.05+200;
-             qreal y = hexHeight * (row + 0.5 * (col % 2))*1.05+80;
+             qreal y = hexHeight * (row + 0.5 * (col % 2))*1.05+60;
 
              int hexType;
              QString text= fgrid[row][col];
@@ -375,18 +375,11 @@ void game_page::create_board(){
              hex->setPen(QPen(Qt::white, 1));
              hexGrid[row][col] = {
                  hex
-
                 };
               hexGrid[row][col]->set_x(x);
               hexGrid[row][col]->set_y(y);
               hexGrid[row][col]->Pos.setX(x);
               hexGrid[row][col]->Pos.setY(y);
-//              hexGrid[row][col]->upNeig = nullptr;
-//              hexGrid[row][col]->upRNeig = nullptr;
-//              hexGrid[row][col]->upLNeig = nullptr;
-//              hexGrid[row][col]->dnNeig = nullptr;
-//              hexGrid[row][col]->dnRNeig = nullptr;
-//              hexGrid[row][col]->dnLNeig = nullptr;
              }
        }
 
@@ -464,8 +457,8 @@ void game_page::parse(){
 
 void game_page::set_name(const QString &name1, const QString & name2){
 
-   ui->label->setText(name1);
-   ui->label_2->setText(name2);
+   ui->p1_name->setText(name1);
+   ui->p2_name->setText(name2);
 }
 
 void game_page::on_load_game_btn_clicked()

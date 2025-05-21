@@ -10,6 +10,9 @@
 #include <QtMath>
 #include <QString>
 #include "hexagonitem.h"
+#include <QGraphicsProxyWidget>
+#include <QLabel>
+#include <QPropertyAnimation>
 class game_page;
 
 const int AGENT_WIDTH = 250;
@@ -59,6 +62,12 @@ public:
      int Get_aCol();
 
      QString getInfoText();
+
+     QGraphicsProxyWidget* info_widget_proxy;
+     QLabel* info_label;
+     QPropertyAnimation* fade_anim;
+
+     void setupInfoWidget();
 
      virtual bool walk_ground();
      virtual bool walk_water();
