@@ -185,6 +185,15 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
            painter->setFont(font);
            painter->drawText(boundingRect(), Qt::AlignCenter, text);
        }
+       QRectF bounds = polygon().boundingRect();
+       if(placed_agent && !pixmap.isNull()){
+           QPainterPath path;
+           path.addPolygon(polygon());
+           painter->save();
+           painter->setClipPath(path);
+           painter->drawPixmap(bounds, pixmap, pixmap.rect());
+           painter->restore();
+       }
 }
 
 

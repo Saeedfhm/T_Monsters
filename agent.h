@@ -32,7 +32,9 @@ public:
      void set_null();
 
      void set_Name(QString);
-     QString Get_Name();
+     QString Get_Name(){
+         return  name;
+     }
 
      void set_Hp(int);
      int Get_Hp();

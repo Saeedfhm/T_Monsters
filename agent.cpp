@@ -166,7 +166,7 @@ QColor agent::getBaseColor() const
 void agent::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton && isEnabled() && m_gamePage) {
-           m_gamePage->handleAgentClick(this); // یا ارسال row/col اگر دارد
+           m_gamePage->handleAgentClick(this);
 
             qDebug() << "Mouse pressed on hex at row:" << a_row << "col:" << a_col;
 

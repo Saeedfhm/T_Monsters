@@ -122,8 +122,8 @@ void game_page::add_agent(){
             a->set_pixmap(":/Duraham.webp");
         }
 
-        else if (name == "Colonel Baba") {
-            a = new Waterwalking("Colonel Baba", 36, type,this);
+        else if (name == "Colonel_baba") {
+            a = new Waterwalking("Colonel_baba", 36, type,this);
             a->set_Hp(400);
             a->set_Mobility(2);
             a->set_Damage(100);
@@ -158,13 +158,13 @@ void game_page::add_agent(){
             a->set_pixmap(":/Sanka.webp");
         }
         // ------------------ grounded agents ---------------------
-        else if (name == "Sir Lamorak") {
-            a = new grounded("Sir Lamorak", 36, type,this);
+        else if (name == "SirLamorak") {
+            a = new grounded("SirLamorak", 36, type,this);
             a->set_Hp(320);
             a->set_Mobility(3);
             a->set_Damage(110);
             a->set_AttackRange(1);
-            a->set_pixmap(":/Lamorak.webp");
+            a->set_pixmap(":/SirLamorak.webp");
         }
 
         else if (name == "Kabu") {
@@ -248,13 +248,13 @@ void game_page::add_agent(){
             a->set_pixmap(":/Karissa.webp");
         }
 
-        else if (name == "Sir Philip") {
-            a = new grounded("Sir Philip", 36, type,this);
+        else if (name == "SirPhilip") {
+            a = new grounded("SirPhilip", 36, type,this);
             a->set_Hp(400);
             a->set_Mobility(2);
             a->set_Damage(100);
             a->set_AttackRange(1);
-            a->set_pixmap(":/Sir philiph.webp");
+            a->set_pixmap(":/SirPhilip.webp");
         }
 
         else if (name == "Frost") {
@@ -263,7 +263,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(80);
             a->set_AttackRange(2);
-            a->set_pixmap(":/Tusk.webp");
+            a->set_pixmap(":/Frost.webp");
         }
 
         else if (name == "Tusk") {
@@ -283,7 +283,7 @@ void game_page::add_agent(){
             a->set_Mobility(3);
             a->set_Damage(120);
             a->set_AttackRange(1);
-            a->set_pixmap(":/Tusk.webp");
+            a->set_pixmap(":/Rambu.webp");
         }
 
         // ----------------- floating agents --------------------
@@ -303,7 +303,7 @@ void game_page::add_agent(){
             a->set_Mobility(3);
             a->set_Damage(120);
             a->set_AttackRange(2);
-            a->set_pixmap(":/Sabrina.webp");
+            a->set_pixmap(":/Death.webp");
 
         }
 
@@ -534,18 +534,27 @@ void game_page::handleHexagonClick(int row, int col) {
 
     if (!selectedAgent) return;
 
-        if ((currentPlayer == 1 &&  hexGrid[row][col]->get_m_type() == 1) ||
-            (currentPlayer == 2 &&  hexGrid[row][col]->get_m_type() == 2)) {
+    if ((currentPlayer == 1 &&  hexGrid[row][col]->get_m_type() == 1) ||
+        (currentPlayer == 2 &&  hexGrid[row][col]->get_m_type() == 2)) {
 
-            hexGrid[row][col]->setType(selectedAgent->get_power());
+//            hexGrid[row][col]->setType(selectedAgent->get_power());
+
+            hexGrid[row][col]->placed_agent = selectedAgent;
+
+            QString path = selectedAgent->Get_Name();
+
+            hexGrid[row][col]->set_pixmap(":/" + path + ".webp");
+
+
+
             hexGrid[row][col]->update();
 
             selectedAgent->hide();
+
             selectedAgent = nullptr;
 
             turnTimer->stop();
             switchPlayer();
-
 
         }
 }

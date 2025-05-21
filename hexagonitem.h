@@ -10,6 +10,7 @@
 #include <QtMath>
 #include "agent.h"
 class game_page; //
+class agent;
 
 
 const int VIEW_WIDTH = 600;
@@ -59,18 +60,18 @@ public:
         return y;
     }
 
-
+    void set_pixmap(const QString path) {pixmap.load(path);}
 
 
     QPointF Pos;
 
-//    agent *placed_agent;
-//    hexagonitem * upNeig;
-//    hexagonitem * upLNeig;
-//    hexagonitem * dnLNeig;
-//    hexagonitem * dnNeig;
-//    hexagonitem * dnRNeig;
-//    hexagonitem * upRNeig;
+    agent* placed_agent;
+    hexagonitem* upNeig;
+    hexagonitem* upLNeig;
+    hexagonitem* dnLNeig;
+    hexagonitem* dnNeig;
+    hexagonitem* dnRNeig;
+    hexagonitem* upRNeig;
 
 
 signals:
@@ -100,6 +101,9 @@ private:
       qreal y;
       qreal m_size;
       QColor getBaseColor() const;
+
+      QPixmap pixmap;
+      QString path;
 
 
 };

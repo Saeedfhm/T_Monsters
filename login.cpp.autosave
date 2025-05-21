@@ -8,7 +8,7 @@ login::login(QWidget *parent) :
     ui(new Ui::login)
 {
     ui->setupUi(this);
-    ui->game_btn->setFixedSize(80, 30); // عرض: 100 پیکسل، ارتفاع: 50 پیکسل
+    ui->game_btn->setFixedSize(80, 30);
     setFixedSize(1200, 800);
 
     agentslist = new QListWidget(this);
