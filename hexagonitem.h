@@ -8,7 +8,7 @@
 #include <QPolygonF>
 #include <QPointF>
 #include <QtMath>
-
+#include "agent.h"
 class game_page; //
 
 
@@ -21,7 +21,6 @@ const int HEX_ROWS = 5;
 class hexagonitem : public QObject, public QGraphicsPolygonItem {
 //    Q_OBJECT
 public:
-   // explicit hexagonitem(qreal size, int type, QGraphicsItem *parent = nullptr);
     hexagonitem(qreal size, int type, game_page* gamePage, QGraphicsItem *parent = nullptr);
     void setType(int type);
     void setHighlight(bool highlight);
@@ -32,36 +31,46 @@ public:
 
 
     void set_mIshighlight(bool);
-        bool get_mIshighlight();
+    bool get_mIshighlight();
 
-        void set_m_row(int);
-        int get_m_row();
+    void set_m_row(int);
+    int get_m_row();
 
-        void set_m_col(int);
-        int get_m_col();
+    void set_m_col(int);
+    int get_m_col();
 
-        int get_m_type();
-        void set_m_type(int);
+    int get_m_type();
+    void set_m_type(int);
 
 
-        void set_x(qreal a){
-            x = a;
-        }
+    void set_x(qreal a){
+        x = a;
+    }
 
-        qreal get_x(){
-            return x;
-        }
+    qreal get_x(){
+        return x;
+    }
 
-        void set_y(qreal a){
-            y = a;
-        }
+    void set_y(qreal a){
+        y = a;
+    }
 
-        qreal get_y(){
-            return y;
-        }
+    qreal get_y(){
+        return y;
+    }
+
+
 
 
     QPointF Pos;
+
+//    agent *placed_agent;
+//    hexagonitem * upNeig;
+//    hexagonitem * upLNeig;
+//    hexagonitem * dnLNeig;
+//    hexagonitem * dnNeig;
+//    hexagonitem * dnRNeig;
+//    hexagonitem * upRNeig;
 
 
 signals:
@@ -91,6 +100,7 @@ private:
       qreal y;
       qreal m_size;
       QColor getBaseColor() const;
+
 
 };
 

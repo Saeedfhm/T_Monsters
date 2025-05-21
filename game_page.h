@@ -40,6 +40,8 @@ public:
     void set_agents_name(QString agents);
     int a_size();
 
+    void validation_negihbour();
+
     ~game_page();
 
 private slots:

@@ -31,7 +31,20 @@ agent::agent(QString n , qreal size, int type, game_page* gamePage, QGraphicsIte
         setPolygon(rec);
         setAcceptHoverEvents(true);
         setFlag(QGraphicsItem::ItemIsSelectable);
+        hover_info_text = new QGraphicsTextItem(this);
+        hover_info_text->setDefaultTextColor(Qt::white);
+        hover_info_text->setVisible(false);
+        hover_info_text->setZValue(10);
 }
+
+QString agent::getInfoText() {
+    return QString("Name: %1\nHP: %2\nMobility: %3\nDamage: %4\nRange: %5")
+        .arg(name)
+        .arg(HP)
+        .arg(Mobility)
+        .arg(Damage)
+        .arg(AttackRange);
+    }
 
 void agent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -53,10 +66,10 @@ void agent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     QRectF bounds = polygon().boundingRect();
     if (!pixmap.isNull()) {
         QPainterPath path;
-        path.addPolygon(polygon());      // محدوده clip را به شکل شش‌ضلعی تعیین می‌کنیم
+        path.addPolygon(polygon());
         painter->save();
-        painter->setClipPath(path);      // فقط داخل این شکل نقاشی بشه
-        painter->drawPixmap(bounds, pixmap, pixmap.rect()); // کشیدن تصویر روی شش‌ضلعی
+        painter->setClipPath(path);
+        painter->drawPixmap(bounds, pixmap, pixmap.rect());
         painter->restore();
     }
 }
@@ -142,10 +155,6 @@ bool  agent::stay_water(){
 }
 
 
-
-
-
-
 QColor agent::getBaseColor() const
 {
     switch(Mobility) {
@@ -180,19 +189,29 @@ void agent::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void agent::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    setHighlight(true);
-    setPos(x() - 10, y());
-    setScale(1.2);
+//   setHighlight(true);
+//   setPos(x() - 10, y());
+//   setScale(1.2);
 
-    QGraphicsPolygonItem::hoverEnterEvent(event);
+   hover_info_text->setPlainText(getInfoText());
+
+   QRectF bounds = polygon().boundingRect();
+   QPointF pos = bounds.topRight() + QPointF(5, -5); // کنار ایجنت
+   hover_info_text->setPos(pos);
+
+   hover_info_text->setVisible(true);
+
+   QGraphicsPolygonItem::hoverEnterEvent(event);
 }
 
 void agent::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    setHighlight(false);
+//    setHighlight(false);
 
-    setPos(x() + 10, y());
-    setScale(1.0);
+//    setPos(x() + 10, y());
+//    setScale(1.0);
+
+    hover_info_text->setVisible(false);
 
     QGraphicsPolygonItem::hoverLeaveEvent(event);
 }

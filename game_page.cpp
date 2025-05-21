@@ -375,15 +375,24 @@ void game_page::create_board(){
              hex->setPen(QPen(Qt::white, 1));
              hexGrid[row][col] = {
                  hex
+
                 };
               hexGrid[row][col]->set_x(x);
               hexGrid[row][col]->set_y(y);
               hexGrid[row][col]->Pos.setX(x);
               hexGrid[row][col]->Pos.setY(y);
+//              hexGrid[row][col]->upNeig = nullptr;
+//              hexGrid[row][col]->upRNeig = nullptr;
+//              hexGrid[row][col]->upLNeig = nullptr;
+//              hexGrid[row][col]->dnNeig = nullptr;
+//              hexGrid[row][col]->dnRNeig = nullptr;
+//              hexGrid[row][col]->dnLNeig = nullptr;
              }
        }
 
 }
+
+
 
 void game_page::parse(){
 
