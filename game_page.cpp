@@ -317,15 +317,18 @@ void game_page::add_agent(){
         if(type==1) {
             x = 0;
             y = asize * sqrt(3.0) * (i);
+//            agents_name.erase(agents_name.begin() + i);
         }
         else {
             x = 840;
             y = asize * sqrt(3.0) * (j);
+//            agents_name.erase(agents_name.begin() + j);
             j++;
         }
         p1_a.append(a);
         a->setPos(x, y);
         scene->addItem(a);
+
     }
 }
 
@@ -380,6 +383,8 @@ void game_page::create_board(){
               hexGrid[row][col]->set_y(y);
               hexGrid[row][col]->Pos.setX(x);
               hexGrid[row][col]->Pos.setY(y);
+              hexGrid[row][col]->placed_agent = nullptr;
+
              }
        }
 
@@ -532,30 +537,64 @@ void game_page::agentSelected(agent* selected)
 void game_page::handleHexagonClick(int row, int col) {
     qDebug() << "Hex clicked at:" << row << "," << col;
 
-    if (!selectedAgent) return;
+    if(hexGrid[row][col]->placed_agent == nullptr && count >= 10 && tempAgent == nullptr) return;
+
+     if(hexGrid[row][col]->placed_agent != nullptr && count >= 10 && tempAgent==nullptr) {
+         if ((currentPlayer == 1 &&   hexGrid[row][col]->owner == 1) ||
+             (currentPlayer == 2 &&   hexGrid[row][col]->owner == 2)) {
+                tempAgent = hexGrid[row][col]->placed_agent;
+                temph = hexGrid[row][col];
+                return;
+         }
+    }
+
+     if(hexGrid[row][col] == temph)return;
+
+    if(hexGrid[row][col]->placed_agent==nullptr && count >= 10){
+        if ((currentPlayer == 1 &&  hexGrid[row][col]->owner == 0) ||
+            (currentPlayer == 2 &&  hexGrid[row][col]->owner == 0)) {
+                hexGrid[row][col]->placed_agent=tempAgent;
+                QString path = hexGrid[row][col]->placed_agent->Get_Name();
+                hexGrid[row][col]->set_pixmap(":/" + path + ".webp");
+                hexGrid[row][col]->update();
+                turnTimer->stop();
+                temph->placed_agent = nullptr;
+//                temph->set_pixmap("");
+                hexGrid[row][col]->owner = currentPlayer;
+                switchPlayer();
+
+                temph->owner = 0;
+                tempAgent = nullptr;
+                return;
+        }
+    }
+
+    if (!selectedAgent && count < 10) return;
 
     if ((currentPlayer == 1 &&  hexGrid[row][col]->get_m_type() == 1) ||
         (currentPlayer == 2 &&  hexGrid[row][col]->get_m_type() == 2)) {
 
-//            hexGrid[row][col]->setType(selectedAgent->get_power());
+        if(hexGrid[row][col]->placed_agent==nullptr) hexGrid[row][col]->placed_agent = selectedAgent;
 
-            hexGrid[row][col]->placed_agent = selectedAgent;
+        QString path = hexGrid[row][col]->placed_agent->Get_Name();
 
-            QString path = selectedAgent->Get_Name();
+        hexGrid[row][col]->set_pixmap(":/" + path + ".webp");
 
-            hexGrid[row][col]->set_pixmap(":/" + path + ".webp");
+        hexGrid[row][col]->owner = currentPlayer;
 
+        hexGrid[row][col]->update();
 
+        selectedAgent->hide();
 
-            hexGrid[row][col]->update();
+        selectedAgent = nullptr;
 
-            selectedAgent->hide();
+        turnTimer->stop();
+        switchPlayer();
 
-            selectedAgent = nullptr;
+        count++;
+        qDebug() << "count:" << count;
 
-            turnTimer->stop();
-            switchPlayer();
-
+        return;
         }
 }
 int game_page::a_size(){

@@ -73,6 +73,8 @@ public:
     hexagonitem* dnRNeig;
     hexagonitem* upRNeig;
 
+    int owner = 0;
+
 
 signals:
         //void clicked(hexagonitem* self);

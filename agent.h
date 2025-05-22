@@ -24,7 +24,7 @@ class agent: public QObject, public QGraphicsPolygonItem
 {
      Q_OBJECT
 public:
-     agent(QString, qreal size, int type, game_page* gamePage,QGraphicsItem *parent = nullptr);
+     agent(QString n, qreal size, int type, game_page* gamePage,QGraphicsItem *parent = nullptr);
 
      QColor getBaseColor() const;
 

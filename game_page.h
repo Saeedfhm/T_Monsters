@@ -42,6 +42,8 @@ public:
 
     void validation_negihbour();
 
+    int count = 0;
+
     ~game_page();
 
 private slots:
@@ -62,10 +64,13 @@ private:
     QTimer *turnTimer;
     int timeRemaining;
     agent *selectedAgent;
+    agent *tempAgent = nullptr;
     QVector<agent*> p1_a;
     QVector<agent*> p2_a;
     QVector<QString> agents_name;
     hexagonitem *targetHex;
+    hexagonitem *temph;
+    bool a_t = false;
     int type;
 };
 
