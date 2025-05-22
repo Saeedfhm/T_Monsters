@@ -115,7 +115,9 @@ bool agent::Get_IsAselected(){
     return is_selected;
 }
 
-
+int agent::Get_Hp(){
+    return  HP;
+}
 
 void agent::set_Hp(int h){
     HP = h;
@@ -125,8 +127,17 @@ void agent::set_Mobility(int m){
     Mobility = m;
 }
 
+int agent::Get_Mobility(){
+    return Mobility;
+}
+
+
 void agent::set_Damage(int D){
     Damage = D;
+}
+
+int agent::Get_Damage(){
+    return Damage;
 }
 
 void agent::set_AttackRange(int a){

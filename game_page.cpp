@@ -539,6 +539,8 @@ void game_page::handleHexagonClick(int row, int col) {
 
     if(hexGrid[row][col]->placed_agent == nullptr && count >= 10 && tempAgent == nullptr) return;
 
+    if((currentPlayer == 1 && hexGrid[row][col]->owner == 2 && tempAgent== nullptr) || (currentPlayer == 2 && hexGrid[row][col]->owner == 1 && tempAgent== nullptr)) return;
+    // ------------ first click after arangment of agents in bord ------------------
      if(hexGrid[row][col]->placed_agent != nullptr && count >= 10 && tempAgent==nullptr) {
          if ((currentPlayer == 1 &&   hexGrid[row][col]->owner == 1) ||
              (currentPlayer == 2 &&   hexGrid[row][col]->owner == 2)) {
@@ -547,9 +549,16 @@ void game_page::handleHexagonClick(int row, int col) {
                 return;
          }
     }
-
-     if(hexGrid[row][col] == temph)return;
-
+     if((hexGrid[row][col]->owner == 1 && temph->owner == 1 && count >= 10 ) || (hexGrid[row][col]->owner == 2 && temph->owner == 2 && count >= 10 )){
+         ui->Message->setText("Same owner. please chose another hexa");
+         tempAgent = nullptr;
+         return;
+     }
+     if(hexGrid[row][col] == temph){
+         tempAgent = nullptr;
+         return;
+     }
+     // ------------ second click after arangment of agents(move operation) ------------------
     if(hexGrid[row][col]->placed_agent==nullptr && count >= 10){
         if ((currentPlayer == 1 &&  hexGrid[row][col]->owner == 0) ||
             (currentPlayer == 2 &&  hexGrid[row][col]->owner == 0)) {
@@ -559,7 +568,6 @@ void game_page::handleHexagonClick(int row, int col) {
                 hexGrid[row][col]->update();
                 turnTimer->stop();
                 temph->placed_agent = nullptr;
-//                temph->set_pixmap("");
                 hexGrid[row][col]->owner = currentPlayer;
                 switchPlayer();
 
@@ -571,6 +579,38 @@ void game_page::handleHexagonClick(int row, int col) {
 
     if (!selectedAgent && count < 10) return;
 
+    // ------------ second click after arangment of agents(attack operation) ----------------------
+
+
+    if(hexGrid[row][col]->placed_agent!=nullptr && count >= 10){
+        if ((currentPlayer == 1 &&  hexGrid[row][col]->owner == 2) ||
+            (currentPlayer == 2 &&  hexGrid[row][col]->owner == 1)) {
+                int Dam = temph->placed_agent->Get_Damage();
+                int hp =  hexGrid[row][col]->placed_agent->Get_Hp();
+                hp-=Dam;
+                hexGrid[row][col]->placed_agent->set_Hp(hp);
+                QString name = hexGrid[row][col]->placed_agent->Get_Name();
+
+                ui->Message->setText("Agent " + name + " Hp:  " + QString::number(hp));
+
+                if(hexGrid[row][col]->placed_agent->Get_Hp() <= 0) {
+                    hexGrid[row][col]->placed_agent = nullptr;
+                    hexGrid[row][col]->owner = 0;
+                    ui->Message->setText("Agent " + name + " died in " + QString::number(row) + " , " + QString::number(col));
+                }
+                hexGrid[row][col]->update();
+                turnTimer->stop();
+                switchPlayer();
+                agent* t = tempAgent;
+                tempAgent = nullptr;
+                temph->placed_agent = t;
+                return;
+        }
+    }
+
+
+
+    // ------------ first click for arangment of agents in bord ------------------
     if ((currentPlayer == 1 &&  hexGrid[row][col]->get_m_type() == 1) ||
         (currentPlayer == 2 &&  hexGrid[row][col]->get_m_type() == 2)) {
 
