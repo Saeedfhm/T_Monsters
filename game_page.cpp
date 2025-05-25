@@ -111,7 +111,7 @@ void game_page::add_agent(){
             a->set_Mobility(2);
             a->set_Damage(100);
             a->set_AttackRange(1);
-            a->set_pixmap(":/Reketon.webp");
+            a->set_pixmap(":/Angus.webp");
         }
         else if (name == "Duraham") {
             a = new Waterwalking("Duraham", 36, type,this);
@@ -339,12 +339,17 @@ void game_page::create_board(){
         hexGrid[row].resize(HEX_COLS);
     }
 
+    for (int row = 0; row < HEX_ROWS; ++row) {
+        for(int col = 0; col < HEX_COLS; col++){
+           hexGrid[row][col] = nullptr;
+        }
+    }
 
-     qreal hexSize = qMin(
-         (VIEW_WIDTH-80) / (HEX_COLS * 1.5),
-         (VIEW_HEIGHT-80) / ((HEX_ROWS + 0.5) * sqrt(3.0))
-     );
-     hexSize=36;
+    qreal hexSize = qMin(
+        (VIEW_WIDTH-80) / (HEX_COLS * 1.5),
+        (VIEW_HEIGHT-80) / ((HEX_ROWS + 0.5) * sqrt(3.0))
+    );
+    hexSize=36;
     qreal hexWidth = hexSize * 2.0;
     qreal hexHeight = hexSize * sqrt(3.0);
 
@@ -388,8 +393,31 @@ void game_page::create_board(){
              }
        }
 
+        for(int row = 0; row < HEX_ROWS; row++){
+            for(int cols = 0; cols < HEX_COLS; cols++){
+                if (hexGrid[row][cols] == nullptr) continue;
+                for(int i = 0; i < 6; i++){
+                    int nx;
+                    int ny;
+                    if(cols%2==0){
+                        nx = row +  even[i].first;
+                        ny = cols +  even[i].second;
+                        if(nx >= 0 && nx < HEX_ROWS && ny >= 0 && ny < HEX_COLS &&
+                           hexGrid[nx][ny] != nullptr) {
+                            hexGrid[row][cols]->neghibours.append(hexGrid[nx][ny]);
+                        }
+                        }else {
+                        nx = row +  odd[i].first;
+                        ny = cols +  odd[i].second;
+                        if(nx >= 0 && nx < HEX_ROWS && ny >= 0 && ny < HEX_COLS &&
+                           hexGrid[nx][ny] != nullptr) {
+                            hexGrid[row][cols]->neghibours.append(hexGrid[nx][ny]);
+                        }
+                    }
+                }
+            }
+        }
 }
-
 
 
 void game_page::parse(){
@@ -458,6 +486,26 @@ void game_page::parse(){
      }
       create_board();
       add_agent();
+
+      for (int row = 0; row < HEX_ROWS; row++) {
+          for (int col = 0; col < HEX_COLS; col++) {
+
+              if (hexGrid[row][col] == nullptr) continue;
+
+              qDebug() << "hexagon neighbours: row:" << row << "col:" << col;
+
+              for (int i = 0; i < hexGrid[row][col]->neghibours.size(); i++) {
+                  hexagonitem* neighbor = hexGrid[row][col]->neghibours[i];
+                  if (neighbor != nullptr) {
+                      qDebug() << i << ". neighbour at: "
+                               << neighbor->get_m_row()
+                               << neighbor->get_m_col();
+                  } else {
+                      qDebug() << i << ". neighbour is nullptr";
+                  }
+              }
+          }
+      }
  }
 
 void game_page::set_name(const QString &name1, const QString & name2){
@@ -539,6 +587,19 @@ void game_page::handleHexagonClick(int row, int col) {
 
     if(hexGrid[row][col]->placed_agent == nullptr && count >= 10 && tempAgent == nullptr) return;
 
+//    if(count > 10){
+//        int mob = hexGrid[row][col]->placed_agent->Get_Mobility();
+//           bool inraneg = true;
+//           for(int i = 0; i < 6 ; i++){
+//               int nx = dx[i] + row;
+//               int ny = dy[i] + col;
+//               if(nx >= 0 && nx < 5 && nx <= mob && ny >= 0 && ny < 9 && ny <= mob){
+
+//               }
+//           }
+
+//    }
+
     if((currentPlayer == 1 && hexGrid[row][col]->owner == 2 && tempAgent== nullptr) || (currentPlayer == 2 && hexGrid[row][col]->owner == 1 && tempAgent== nullptr)) return;
     // ------------ first click after arangment of agents in bord ------------------
      if(hexGrid[row][col]->placed_agent != nullptr && count >= 10 && tempAgent==nullptr) {
@@ -578,6 +639,8 @@ void game_page::handleHexagonClick(int row, int col) {
     }
 
     if (!selectedAgent && count < 10) return;
+
+
 
     // ------------ second click after arangment of agents(attack operation) ----------------------
 

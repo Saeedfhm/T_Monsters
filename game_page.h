@@ -33,6 +33,39 @@ public:
     void handleHexagonClick(int row, int col);
     void handleAgentClick(agent* clickedAgent);
 
+    // even array
+    QVector<QPair<int , int>> even= {
+
+        {-1 , 0} , // up
+
+        {-1 , 1} ,//right up
+
+        {0 , 1} , // right down
+
+        {1 , 0}, // down
+
+        {0 , -1}, // left down
+
+        {-1 , -1} , // left up
+
+    };
+
+    // odd array
+     QVector<QPair<int , int>> odd {
+        {-1 , 0} , // up
+
+        {0 , 1}, //right up
+
+        {1 , 1}, // right down
+
+        {1 , 0}, // down
+
+        {1 , -1}, // left down
+
+        {0 , -1} // left up
+
+    };
+
     void add_agent();
 
     int selected_agent_count;
@@ -43,6 +76,8 @@ public:
     void validation_negihbour();
 
     int count = 0;
+
+    void BFS(int row , int col , int mobility);
 
     ~game_page();
 

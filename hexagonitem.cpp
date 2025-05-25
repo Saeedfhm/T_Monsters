@@ -13,7 +13,7 @@ QColor typeToColor(int type) {
         case 1: return Qt::green;
         case 2: return Qt::red;
         case 3: return Qt::blue;
-        case 4: return Qt::black;
+        case 4: return Qt::gray;
         case 5: return Qt::black;
         case 6: return QColor(205, 134, 134);
         case 7: return QColor(50, 100, 18);

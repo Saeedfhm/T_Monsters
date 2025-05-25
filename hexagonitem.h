@@ -75,6 +75,8 @@ public:
 
     int owner = 0;
 
+    QVector<hexagonitem*> neghibours;
+
 
 signals:
         //void clicked(hexagonitem* self);
@@ -103,7 +105,6 @@ private:
       qreal y;
       qreal m_size;
       QColor getBaseColor() const;
-
       QPixmap pixmap;
       QString path;
 

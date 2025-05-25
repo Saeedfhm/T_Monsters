@@ -34,6 +34,7 @@
         <file>image/background/capsule_616x353.jpg</file>
         <file>image/background/552x414bb.png</file>
         <file>image/background/16_08_06_raw.jpg</file>
+        <file>image/background/image4.jpg</file>
     </qresource>
     <qresource prefix="/new/hero">
         <file>image/heros/hero1.png</file>
