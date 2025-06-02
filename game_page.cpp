@@ -8,6 +8,8 @@
 #include <QFile>
 #include <QTextStream>
 #include <QVector>
+#include <QQueue>
+#include <QPair>
 #include <QString>
 #include <QMessageBox>
 #include <QTimer>
@@ -317,18 +319,14 @@ void game_page::add_agent(){
         if(type==1) {
             x = 0;
             y = asize * sqrt(3.0) * (i);
-//            agents_name.erase(agents_name.begin() + i);
         }
         else {
             x = 840;
             y = asize * sqrt(3.0) * (j);
-//            agents_name.erase(agents_name.begin() + j);
             j++;
         }
-        p1_a.append(a);
         a->setPos(x, y);
         scene->addItem(a);
-
     }
 }
 
@@ -582,23 +580,37 @@ void game_page::agentSelected(agent* selected)
      else  selectedAgent->Set_IsAselected(true);
 }
 
+void game_page::BFS(int r , int c , int m){
+    QVector<QVector<bool>> visited(5 , QVector<bool>(9 , false));
+    QQueue <hexagonitem *> q;
+
+    if(hexGrid[r][c]->placed_agent==nullptr) return;
+
+    q.push_back(hexGrid[r][c]);
+
+    visited[r][c] = true;
+    int j = 0;
+    while(!q.empty() && j < m * 6){
+        hexagonitem* h = q.front();
+        q.pop_front();
+        for(int i = 0; i < h->neghibours.size(); i++){
+            hexagonitem* n = h->neghibours[i];
+            int mrow = n->get_m_row();
+            int mcol = n->get_m_col();
+            if(visited[mrow][mcol] == false){
+                q.push_back(n);
+                hexGrid[mrow][mcol]->is_inRange = true;
+                visited[mrow][mcol] = true;
+            }
+        }
+    j++;
+    }
+}
+
 void game_page::handleHexagonClick(int row, int col) {
     qDebug() << "Hex clicked at:" << row << "," << col;
 
     if(hexGrid[row][col]->placed_agent == nullptr && count >= 10 && tempAgent == nullptr) return;
-
-//    if(count > 10){
-//        int mob = hexGrid[row][col]->placed_agent->Get_Mobility();
-//           bool inraneg = true;
-//           for(int i = 0; i < 6 ; i++){
-//               int nx = dx[i] + row;
-//               int ny = dy[i] + col;
-//               if(nx >= 0 && nx < 5 && nx <= mob && ny >= 0 && ny < 9 && ny <= mob){
-
-//               }
-//           }
-
-//    }
 
     if((currentPlayer == 1 && hexGrid[row][col]->owner == 2 && tempAgent== nullptr) || (currentPlayer == 2 && hexGrid[row][col]->owner == 1 && tempAgent== nullptr)) return;
     // ------------ first click after arangment of agents in bord ------------------
@@ -607,6 +619,8 @@ void game_page::handleHexagonClick(int row, int col) {
              (currentPlayer == 2 &&   hexGrid[row][col]->owner == 2)) {
                 tempAgent = hexGrid[row][col]->placed_agent;
                 temph = hexGrid[row][col];
+                int m = hexGrid[row][col]->placed_agent->Get_Mobility();
+                BFS(row , col , m);
                 return;
          }
     }
@@ -699,6 +713,8 @@ void game_page::handleHexagonClick(int row, int col) {
 
         return;
         }
+
+    return;
 }
 int game_page::a_size(){
     return agents_name.size();

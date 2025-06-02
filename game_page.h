@@ -95,16 +95,14 @@ private:
     QGraphicsScene *scene;
     QVector<QVector<hexagonitem*>> hexGrid;
     std::vector<std::vector<QChar>> fgrid;
+    hexagonitem *targetHex;
+    hexagonitem *temph;
     int currentPlayer;
     QTimer *turnTimer;
     int timeRemaining;
     agent *selectedAgent;
     agent *tempAgent = nullptr;
-    QVector<agent*> p1_a;
-    QVector<agent*> p2_a;
     QVector<QString> agents_name;
-    hexagonitem *targetHex;
-    hexagonitem *temph;
     bool a_t = false;
     int type;
 };

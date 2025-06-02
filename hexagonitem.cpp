@@ -103,7 +103,6 @@ void hexagonitem::setHighlight(bool highlight)
     update();
 }
 
-// در hexagonitem.cpp
 void hexagonitem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
@@ -130,8 +129,7 @@ void hexagonitem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)  {
                qDebug() << "Mouse released on hex (normal click) at row:"
                << m_row << "col:" << m_col;
              }
-             setBrush(typeToColor(m_type)); // بازگشت به رنگ اصلی
-             //emit hexClicked(this);
+             setBrush(typeToColor(m_type));
           }
           QGraphicsPolygonItem::mouseReleaseEvent(event);
  }
@@ -140,15 +138,13 @@ void hexagonitem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)  {
 void hexagonitem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
-     setHighlight(true);
- //   emit hoverEntered();
+    setHighlight(true);
 }
 
 void hexagonitem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
     setHighlight(false);
- //   emit hoverLeft();
 }
 
 
@@ -158,11 +154,11 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    // تعیین رنگ با توجه به هایلایت
     QColor color = getBaseColor();
       if (m_isHighlighted) {
-          color = color.lighter(200); // روشن‌تر کردن رنگ هنگام هاور
+          color = color.lighter(200);
       }
+      if(is_inRange) color = QColor(205, 34, 134);
       painter->setBrush(color);
       painter->setPen(QPen(Qt::white, 1));
       painter->drawPolygon(polygon());
@@ -176,7 +172,6 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
            default: text = "";
        }
 
-       // نمایش متن در مرکز
        if (!text.isEmpty()) {
            painter->setPen(m_isHighlighted ? Qt::yellow : Qt::white);
            QFont font = painter->font();

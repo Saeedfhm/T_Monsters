@@ -66,21 +66,15 @@ public:
     QPointF Pos;
 
     agent* placed_agent;
-    hexagonitem* upNeig;
-    hexagonitem* upLNeig;
-    hexagonitem* dnLNeig;
-    hexagonitem* dnNeig;
-    hexagonitem* dnRNeig;
-    hexagonitem* upRNeig;
-
     int owner = 0;
-
     QVector<hexagonitem*> neghibours;
+
+    bool is_inRange = false;
 
 
 signals:
         //void clicked(hexagonitem* self);
-//        void hexClicked(hexagonitem*);
+        //void hexClicked(hexagonitem*);
         void clicked(hexagonitem* self);
         void hoverEntered();
         void hoverLeft();
