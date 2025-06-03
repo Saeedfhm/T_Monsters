@@ -24,7 +24,7 @@ class game_page : public QMainWindow
 public:
     explicit game_page(QWidget *parent = nullptr);
     void set_name(const QString &, const QString &);
-    void parse();
+    void parse(const QString &filepath);
     void create_board();
     void create_agent();
     void startPlayerTurn();
