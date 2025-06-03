@@ -80,6 +80,7 @@ public:
     int count = 0;
 
     void BFS(int row , int col , int mobility , int ar);
+    void replacement(int row , int col , agent* temph);
 
     ~game_page();
 

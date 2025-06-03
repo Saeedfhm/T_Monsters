@@ -204,13 +204,15 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
            painter->restore(); // خیلی مهم: clip رو حذف کن
 
            // حالا بردر قرمز دور همون شش‌ضلعی بکش — روی تصویر دیده می‌شه
-           if (is_inAttackRange) {
-               QPen pen(Qt::red);
-               pen.setWidth(4); // ضخامت واضح
-               painter->setPen(pen);
-               painter->setBrush(Qt::NoBrush); // فقط خط دور، بدون پر کردن
-               painter->drawPolygon(polygon()); // دور شش‌ضلعی رو بکش
-           }
+
+       }
+
+       if (is_inAttackRange) {
+           QPen pen(Qt::red);
+           pen.setWidth(4); // ضخامت واضح
+           painter->setPen(pen);
+           painter->setBrush(Qt::NoBrush); // فقط خط دور، بدون پر کردن
+           painter->drawPolygon(polygon()); // دور شش‌ضلعی رو بکش
        }
 }
 
