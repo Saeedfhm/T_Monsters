@@ -13,6 +13,8 @@ public:
     bool walk_water()  override;
     bool stay_ground()  override;
     bool stay_water()  override;
+    bool stay_mountain() override;
+    bool walk_mountain() override;
 
 private:
 };

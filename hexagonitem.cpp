@@ -180,14 +180,37 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
            painter->setFont(font);
            painter->drawText(boundingRect(), Qt::AlignCenter, text);
        }
-       QRectF bounds = polygon().boundingRect();
-       if(placed_agent && !pixmap.isNull()){
+//       QRectF bounds = polygon().boundingRect();
+//       if(placed_agent && !pixmap.isNull()){
+//           QPainterPath path;
+//           path.addPolygon(polygon());
+//           painter->save();
+//           painter->setClipPath(path);
+//           painter->drawPixmap(bounds, pixmap, pixmap.rect());
+//           painter->restore();
+//       }
+
+       if (placed_agent && !pixmap.isNull()) {
            QPainterPath path;
            path.addPolygon(polygon());
+
+           // کشیدن عکس فقط داخل شش‌ضلعی
            painter->save();
            painter->setClipPath(path);
-           painter->drawPixmap(bounds, pixmap, pixmap.rect());
-           painter->restore();
+
+           QRectF imageRect = polygon().boundingRect();
+           painter->drawPixmap(imageRect, pixmap, pixmap.rect());
+
+           painter->restore(); // خیلی مهم: clip رو حذف کن
+
+           // حالا بردر قرمز دور همون شش‌ضلعی بکش — روی تصویر دیده می‌شه
+           if (is_inAttackRange) {
+               QPen pen(Qt::red);
+               pen.setWidth(4); // ضخامت واضح
+               painter->setPen(pen);
+               painter->setBrush(Qt::NoBrush); // فقط خط دور، بدون پر کردن
+               painter->drawPolygon(polygon()); // دور شش‌ضلعی رو بکش
+           }
        }
 }
 

@@ -33,6 +33,8 @@ public:
     void handleHexagonClick(int row, int col);
     void handleAgentClick(agent* clickedAgent);
 
+    void removerange();
+
     // even array
     QVector<QPair<int , int>> even= {
 
@@ -77,7 +79,7 @@ public:
 
     int count = 0;
 
-    void BFS(int row , int col , int mobility);
+    void BFS(int row , int col , int mobility , int ar);
 
     ~game_page();
 

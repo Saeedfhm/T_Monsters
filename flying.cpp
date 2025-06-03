@@ -10,9 +10,20 @@ bool flying::walk_ground(){
 bool  flying::walk_water(){
     return true;
 }
+
+bool flying::walk_mountain(){
+    return true;
+}
+
 bool  flying::stay_ground(){
     return true;
 }
+
 bool  flying::stay_water(){
     return false;
 }
+
+bool flying::stay_mountain(){
+    return false;
+}
+

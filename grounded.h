@@ -13,6 +13,9 @@ public:
     bool walk_water()  override;
     bool stay_ground()  override;
     bool stay_water()  override;
+
+    bool walk_mountain()  override;
+    bool stay_mountain()  override;
 };
 
 #endif // GROUNDED_H

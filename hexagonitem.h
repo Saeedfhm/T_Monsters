@@ -70,16 +70,15 @@ public:
     QVector<hexagonitem*> neghibours;
 
     bool is_inRange = false;
+    bool is_inAttackRange = false;
 
 
 signals:
-        //void clicked(hexagonitem* self);
-        //void hexClicked(hexagonitem*);
-        void clicked(hexagonitem* self);
-        void hoverEntered();
-        void hoverLeft();
+    void clicked(hexagonitem* self);
+    void hoverEntered();
+    void hoverLeft();
 
-    ~hexagonitem() override = default;  // مهم: اضافه کردن destructor
+    ~hexagonitem() override = default;
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
@@ -90,17 +89,17 @@ protected:
 
 private:
 
-      bool m_isHighlighted;
-      int m_row;
-      int m_col;
+  bool m_isHighlighted;
+  int m_row;
+  int m_col;
 
-      int m_type;
-      qreal x;
-      qreal y;
-      qreal m_size;
-      QColor getBaseColor() const;
-      QPixmap pixmap;
-      QString path;
+  int m_type;
+  qreal x;
+  qreal y;
+  qreal m_size;
+  QColor getBaseColor() const;
+  QPixmap pixmap;
+  QString path;
 
 
 };

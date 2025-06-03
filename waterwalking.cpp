@@ -20,3 +20,11 @@ bool  Waterwalking::stay_ground(){
 bool  Waterwalking::stay_water(){
     return true;
 }
+
+bool  Waterwalking::stay_mountain(){
+    return false;
+}
+
+bool  Waterwalking::walk_mountain(){
+    return false;
+}

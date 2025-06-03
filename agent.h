@@ -73,9 +73,12 @@ public:
 
      virtual bool walk_ground();
      virtual bool walk_water();
+     virtual bool walk_mountain();
 
      virtual bool stay_ground();
      virtual bool stay_water();
+     virtual bool stay_mountain();
+
 
      void set_aname(QString n) { a_name = n; }
      void set_pixmap(const QString path) {pixmap.load(path);}

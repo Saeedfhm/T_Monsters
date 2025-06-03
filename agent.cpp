@@ -162,6 +162,13 @@ bool  agent::stay_water(){
     return true;
 }
 
+bool  agent::stay_mountain(){
+    return true;
+}
+
+bool  agent::walk_mountain(){
+    return true;
+}
 
 QColor agent::getBaseColor() const
 {

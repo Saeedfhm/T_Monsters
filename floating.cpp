@@ -17,3 +17,11 @@ bool  floating::stay_ground(){
 bool  floating::stay_water(){
     return true;
 }
+
+bool floating::walk_mountain(){
+    return true;
+}
+
+bool  floating::stay_mountain(){
+    return true;
+}
