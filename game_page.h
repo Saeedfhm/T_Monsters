@@ -82,6 +82,13 @@ public:
     void BFS(int row , int col , int mobility , int ar);
     void replacement(int row , int col , hexagonitem* h ,agent* temph);
 
+    int p1_count = 5;
+    int p2_count = 5;
+
+    void showVictoryScene(int winner);
+
+    bool gameOver = false;
+
     ~game_page();
 
 private slots:

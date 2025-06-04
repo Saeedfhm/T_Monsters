@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/sounds"/>
+    <qresource prefix="/">
+        <file>orchestral-win-331233.mp3</file>
+    </qresource>
+</RCC>

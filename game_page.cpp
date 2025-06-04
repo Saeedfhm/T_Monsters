@@ -2,6 +2,10 @@
 #include "ui_game_page.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QGraphicsOpacityEffect>
+#include <QPropertyAnimation>
+#include <QtMultimedia>
+#include <QSoundEffect>
 #include <QDebug>
 #include <QObject>
 #include <QRandomGenerator>
@@ -696,6 +700,52 @@ void game_page::replacement(int row , int col , hexagonitem *h ,agent* attacker)
         ui->Message->setText("جایگزینی ممکن نیست - جایی مناسب برای این agent یافت نشد.");
 }
 
+void game_page::showVictoryScene(int winner) {
+    // 1. پیام متنی
+    QGraphicsTextItem* victoryText = new QGraphicsTextItem();
+    victoryText->setPlainText("🏆 Player " + QString::number(winner) + " Wins! 🏆");
+    victoryText->setDefaultTextColor(Qt::yellow);
+    victoryText->setFont(QFont("B Nazanin", 40, QFont::Bold));
+    victoryText->setZValue(1000);
+    victoryText->setPos(150, 180);
+    scene->addItem(victoryText);
+
+    // 2. افکت شفافیت
+    QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+    victoryText->setGraphicsEffect(effect);
+
+    QPropertyAnimation* animation = new QPropertyAnimation(effect, "opacity");
+    animation->setDuration(2000);
+    animation->setStartValue(0.0);
+    animation->setEndValue(1.0);
+    animation->setEasingCurve(QEasingCurve::OutCubic);
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+    // 3. صدای پیروزی
+    QSoundEffect* victorySound = new QSoundEffect(this);
+    victorySound->setSource(QUrl::fromLocalFile(":/sounds/orchestral-win-331233.wav"));
+    victorySound->setVolume(0.8);
+    victorySound->play();
+
+    // 4. دکمه "بازی مجدد"
+//    QPushButton* replayButton = new QPushButton("بازی مجدد", this);
+//    replayButton->setGeometry(200, 300, 120, 40);
+//    replayButton->show();
+
+//    connect(replayButton, &QPushButton::clicked, this, &game_page::resetGame);
+
+    // 5. دکمه خروج
+    QPushButton* exitButton = new QPushButton("خروج", this);
+    exitButton->setGeometry(540, 380, 120, 40);
+    exitButton->show();
+
+    connect(exitButton, &QPushButton::clicked, this, &QWidget::close);
+
+    // پایان بازی
+    gameOver = true;
+    turnTimer->stop();
+}
+
 void game_page::handleHexagonClick(int row, int col) {
     qDebug() << "Hex clicked at:" << row << "," << col;
 
@@ -800,16 +850,31 @@ void game_page::handleHexagonClick(int row, int col) {
                     hexGrid[row][col]->placed_agent = nullptr;
                     hexGrid[row][col]->owner = 0;
                     ui->Message->setText("Agent " + defender + " died in " + QString::number(row) + " , " + QString::number(col));
+                    if(currentPlayer == 1) p2_count--;
+                    if(currentPlayer == 2) p1_count--;
+                }
+                bool both = false;
+                if(temph->placed_agent->Get_Hp() <= 0){
+                    ui->Message->setText("Agent " + defender + " died in " + QString::number(row) + " , " + QString::number(col));
+                    int r = temph->get_m_row();
+                    int c = temph->get_m_col();
+                    hexGrid[r][c]->owner = 0;
+                    hexGrid[r][c]->placed_agent = nullptr;
+                    temph = nullptr;
+                    if(currentPlayer == 1) p1_count--;
+                    if(currentPlayer == 2) p2_count--;
+                    both = true;
                 }
 
                 hexGrid[row][col]->update();
                 turnTimer->stop();
                 switchPlayer();
-//                agent* t = tempAgent;
                 tempAgent = nullptr;
-//                temph->placed_agent = t;
-                replacement(row , col , temph ,temph->placed_agent);
+                if(!both) replacement(row , col , temph ,temph->placed_agent);
                 removerange();
+                if(p1_count == 0 && p2_count > 0) showVictoryScene(2);
+                if(p1_count > 0 && p2_count == 0) showVictoryScene(1);
+
                 return;
         }
         else{

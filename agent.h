@@ -36,6 +36,10 @@ public:
          return  name;
      }
 
+     qreal get_type(){
+         return a_type;
+     }
+
      void set_Hp(int);
      int Get_Hp();
 
@@ -104,8 +108,8 @@ private:
     int power;
     bool a_isHighlighted;
     bool is_selected;
-    qreal a_size;
-    int a_type;
+    int a_size;
+    qreal a_type;
     QChar color;
     QString a_name;
     QPixmap pixmap;

@@ -26,6 +26,7 @@
         <file>Death.webp</file>
         <file>SirPhilip.webp</file>
         <file>SirLamorak.webp</file>
+        <file>sounds/orchestral-win-331233.wav</file>
     </qresource>
     <qresource prefix="/new/background">
         <file>image/background/16_07_55_raw.jpg</file>
@@ -40,4 +41,5 @@
         <file>image/heros/hero1.png</file>
         <file>image/heros/hero2.png</file>
     </qresource>
+    <qresource prefix="/sounds"/>
 </RCC>
