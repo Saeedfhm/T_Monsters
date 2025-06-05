@@ -158,7 +158,13 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
       if (m_isHighlighted) {
           color = color.lighter(200);
       }
+
+      if(owner == 1) color = QColor(50, 100, 18);
+
+      if(owner == 2) color = QColor(220, 38, 38);
+
       if(is_inRange) color = QColor(205, 34, 134);
+
       painter->setBrush(color);
       painter->setPen(QPen(Qt::white, 1));
       painter->drawPolygon(polygon());
@@ -180,15 +186,6 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
            painter->setFont(font);
            painter->drawText(boundingRect(), Qt::AlignCenter, text);
        }
-//       QRectF bounds = polygon().boundingRect();
-//       if(placed_agent && !pixmap.isNull()){
-//           QPainterPath path;
-//           path.addPolygon(polygon());
-//           painter->save();
-//           painter->setClipPath(path);
-//           painter->drawPixmap(bounds, pixmap, pixmap.rect());
-//           painter->restore();
-//       }
 
        if (placed_agent && !pixmap.isNull()) {
            QPainterPath path;
@@ -207,12 +204,29 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
        }
 
-       if (is_inAttackRange) {
+       if(owner == 1){
+           QPen pen(Qt::green);
+           pen.setWidth(4); // ضخامت واضح
+           painter->setPen(pen);
+           painter->setBrush(Qt::NoBrush); // فقط خط دور، بدون پر کردن
+           painter->drawPolygon(polygon());
+       }
+
+       if(owner == 2){
            QPen pen(Qt::red);
            pen.setWidth(4); // ضخامت واضح
            painter->setPen(pen);
            painter->setBrush(Qt::NoBrush); // فقط خط دور، بدون پر کردن
-           painter->drawPolygon(polygon()); // دور شش‌ضلعی رو بکش
+           painter->drawPolygon(polygon());
+       }
+
+       if (is_inAttackRange) {
+           QPen pen(Qt::yellow);
+           pen.setWidth(4); // ضخامت واضح
+           pen.setStyle(Qt::DashLine); // خط چین‌چین
+           painter->setPen(pen);
+           painter->setBrush(Qt::NoBrush);
+           painter->drawPolygon(polygon());
        }
 }
 

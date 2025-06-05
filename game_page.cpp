@@ -656,7 +656,15 @@ void game_page::replacement(int row , int col , hexagonitem *h ,agent* attacker)
     while (!q.isEmpty()) {
         hexagonitem* current = q.front();
         q.pop_front();
+        bool found = false;
+        int minrowdis = 45;
+        int mincoldis = 45;
 
+        int r;
+        int c;
+
+        int hr = h->get_m_row();
+        int hc = h->get_m_col();
         for (hexagonitem* neighbor : current->neghibours) {
             int nrow = neighbor->get_m_row();
             int ncol = neighbor->get_m_col();
@@ -672,28 +680,58 @@ void game_page::replacement(int row , int col , hexagonitem *h ,agent* attacker)
                 if (type == 5 && !attacker->stay_ground()) can_stay = false;
 
                 if (can_stay && neighbor->placed_agent == nullptr) {
-                    // جای جدید
-                    neighbor->placed_agent = attacker;
-                    neighbor->owner = (currentPlayer == 1 ? 2 : 1);
 
-                    // حذف از مکان قبلی
-                    h->placed_agent = nullptr;
+                    found = true;
 
-                    h->set_pixmap("");
-                    h->owner = 0;
+                    int deltar = abs(r - hr);
+                    int deltac = abs(c - hc);
 
-                    // نمایش عکس agent
-                    QString path = attacker->Get_Name();
-                    neighbor->set_pixmap(":/" + path + ".webp");
+                    r = neighbor->get_m_row();
+                    c = neighbor->get_m_col();
 
-                    neighbor->update();
-                    hexGrid[nrow][ncol]->update();
-                    return;
-                } else {
+                   if(deltar <= minrowdis && deltac <= mincoldis){
+                       minrowdis = deltar;
+                       mincoldis = deltac;
+                       hr = r;
+                       hc = c;
+                  }
+                }
+                else {
                     q.push_back(neighbor);
                 }
             }
         }
+
+        if(found){
+//            neighbor->placed_agent = attacker;
+//            neighbor->owner = (currentPlayer == 1 ? 2 : 1);
+
+//            // حذف از مکان قبلی
+//            h->placed_agent = nullptr;
+
+//            h->set_pixmap("");
+//            h->owner = 0;
+
+//            // نمایش عکس agent
+//            QString path = attacker->Get_Name();
+//            neighbor->set_pixmap(":/" + path + ".webp");
+
+//            neighbor->update();
+//            hexGrid[nrow][ncol]->update();
+
+
+            hexGrid[hr][hc]->placed_agent = attacker;
+            hexGrid[hr][hc]->owner = (currentPlayer == 1 ? 2 : 1);
+
+            h->placed_agent = nullptr;
+            h->set_pixmap("");
+            h->owner = 0;
+            QString path = attacker->Get_Name();
+            hexGrid[hr][hc]->set_pixmap(":/" + path + ".webp");
+            hexGrid[hr][hc]->update();
+            return;
+        }
+
     }
 
     if (ui && ui->Message)
@@ -748,6 +786,14 @@ void game_page::showVictoryScene(int winner) {
 
 void game_page::handleHexagonClick(int row, int col) {
     qDebug() << "Hex clicked at:" << row << "," << col;
+
+    if (count < 10) {
+        // جلوگیری از گذاشتن agent روی agentهای قبلی خودی
+        if (hexGrid[row][col]->placed_agent != nullptr) {
+            ui->Message->setText("Hexagon already occupied. Choose another one.");
+            return;
+        }
+    }
 
     if(hexGrid[row][col]->placed_agent == nullptr && count >= 10 && tempAgent == nullptr) return;
 
