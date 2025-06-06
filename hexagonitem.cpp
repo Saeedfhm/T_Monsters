@@ -224,7 +224,6 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
        if (is_inAttackRange) {
            QPen pen(Qt::yellow);
            pen.setWidth(4); // ضخامت واضح
-           pen.setStyle(Qt::DashLine); // خط چین‌چین
            painter->setPen(pen);
            painter->setBrush(Qt::NoBrush);
            painter->drawPolygon(polygon());

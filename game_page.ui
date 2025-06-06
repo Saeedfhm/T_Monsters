@@ -176,8 +176,8 @@ background-color: transparent;</string>
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">font: 63 italic 35pt &quot;URW Bookman&quot;;
-color: rgb(233, 205, 16);
+             <string notr="true">color: rgb(10, 31, 68);
+font: 28pt &quot;Palatino Linotype&quot;;
 border-radius: 15px;</string>
             </property>
             <property name="text">
@@ -321,6 +321,9 @@ border-radius: 45px;</string>
               <layout class="QVBoxLayout" name="verticalLayout_3">
                <item>
                 <widget class="QLabel" name="Message">
+                 <property name="styleSheet">
+                  <string notr="true">font: 75 20pt &quot;Constantia&quot;;</string>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
@@ -376,8 +379,8 @@ background-color: transparent;</string>
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">font: 63 italic 35pt &quot;URW Bookman&quot;;
-color: rgb(233, 205, 16);
+             <string notr="true">color: rgb(10, 31, 68);
+font: 28pt &quot;Palatino Linotype&quot;;
 border-radius: 15px;</string>
             </property>
             <property name="text">

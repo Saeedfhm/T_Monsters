@@ -70,8 +70,9 @@ game_page::game_page(QWidget *parent) :
     targetHex = nullptr;
     ui->vw1->setDragMode(QGraphicsView::NoDrag);
     turnTimer = new QTimer(this);
-    connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
-    startPlayerTurn();
+//    connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
+//    startPlayerTurn();
+    if(count == 10) ui->Message->setText("Pls click start button to start the game");
 }
 
 game_page::~game_page()
@@ -545,6 +546,7 @@ void game_page::updateTimer()
     if (timeRemaining <= 0) {
         turnTimer->stop();
         switchPlayer();
+        ui->Message->setText("Time Finished!!!");
     }
 }
 
@@ -565,12 +567,12 @@ void game_page::updateTimerDisplay()
 void game_page::switchPlayer()
 {
     currentPlayer = (currentPlayer == 1) ? 2 : 1;
-    startPlayerTurn();
+    if(count >= 10) startPlayerTurn();
 }
 
 void game_page::agentSelected(agent* selected)
 {
-     qDebug() << "Agent clicked at power:" << selected->get_power();
+
 
      QList<QGraphicsItem*> items = scene->items();
      for (QGraphicsItem* item : items) {
@@ -825,6 +827,10 @@ void game_page::handleHexagonClick(int row, int col) {
     if((currentPlayer == 1 && hexGrid[row][col]->owner == 2 && tempAgent== nullptr) || (currentPlayer == 2 && hexGrid[row][col]->owner == 1 && tempAgent== nullptr)) return;
     // ------------ first click after arangment of agents in bord ------------------
      if(hexGrid[row][col]->placed_agent != nullptr && count >= 10 && tempAgent==nullptr) {
+         if(ui->start_game->isEnabled()){
+            ui->Message->setText("You have not Start the game");
+            return;
+         }
          if ((currentPlayer == 1 &&   hexGrid[row][col]->owner == 1) ||
              (currentPlayer == 2 &&   hexGrid[row][col]->owner == 2)) {
                 temph = hexGrid[row][col];
@@ -837,20 +843,24 @@ void game_page::handleHexagonClick(int row, int col) {
     }
 
      if((hexGrid[row][col]->owner == 1 && temph->owner == 1 && count >= 10 ) || (hexGrid[row][col]->owner == 2 && temph->owner == 2 && count >= 10 )){
+         removerange();
          ui->Message->setText("Same owner. please chose another hexa");
          tempAgent = nullptr;
          return;
      }
 
      if(hexGrid[row][col] == temph){
+         removerange();
          tempAgent = nullptr;
          return;
      }
 
-     if(selectedAgent == hexGrid[row][col]->placed_agent && count < 10){
-         qDebug() << "another place" ;
-         return;
-     }
+//     if(selectedAgent == hexGrid[row][col]->placed_agent && count < 10){
+//         temph = nullptr;
+//         removerange();
+//         qDebug() << "another place" ;
+//         return;
+//     }
 
      // ------------ second click after arangment of agents(move operation) ------------------
     if(hexGrid[row][col]->placed_agent==nullptr && count >= 10){
@@ -976,7 +986,7 @@ void game_page::handleHexagonClick(int row, int col) {
 
         selectedAgent = nullptr;
 
-        turnTimer->stop();
+//        turnTimer->stop();
         switchPlayer();
 
         count++;
@@ -1000,3 +1010,10 @@ void game_page::set_agents_name(QString name){
     agents_name.append(name);
 }
 
+void game_page::on_start_game_clicked()
+{
+    ui->Message->setText("Game starts");
+    connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
+    startPlayerTurn();
+    ui->start_game->setDisabled(true);
+}

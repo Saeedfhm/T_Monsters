@@ -99,6 +99,8 @@ private slots:
     void updateTimer();
     void agentSelected(agent* selected);
 
+    void on_start_game_clicked();
+
 private:
     int hrows;
     int hcols;
