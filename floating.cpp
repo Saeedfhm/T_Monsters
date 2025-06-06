@@ -4,6 +4,7 @@ floating::floating(QString n, qreal size, int type, game_page* gamePage, QGraphi
     : agent(n, size, type, gamePage, parent)
 {}
 
+// project done
 
 bool floating::walk_ground(){
     return true;

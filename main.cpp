@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include <QApplication>
 
+// project done
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -10,14 +12,5 @@ int main(int argc, char *argv[])
     return a.exec();
 }
 
-
-//std::vector<std::vector<QString>> parseGridFile(const QString& filePath) {
-//    std::vector<std::vector<QString>> grid;
-//    QFile file(filePath);
-
-////    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-////        QDebug << "Cannot open file:" << filePath;
-////        return grid;
-////    }
 
 

@@ -2,6 +2,8 @@
 #include "ui_gallerypage.h"
 #include "second.h"
 
+// project done
+
 gallerypage::gallerypage(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::gallerypage)

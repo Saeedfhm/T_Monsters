@@ -3,6 +3,9 @@
 #include "mainwindow.h"
 #include "game_page.h"
 #include <QListWidgetItem>
+
+// project done
+
 login::login(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::login)

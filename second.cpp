@@ -3,6 +3,8 @@
 #include "gallerypage.h"
 #include "login.h"
 
+// project done
+
 second::second(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::second)

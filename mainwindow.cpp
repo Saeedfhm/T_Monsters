@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "second.h"
 
+// project done
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)

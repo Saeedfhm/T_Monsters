@@ -7,6 +7,7 @@
 #include <QApplication>
 #include "game_page.h"
 
+// project done
 
 QColor typeToColor(int type) {
     switch(type) {
@@ -75,11 +76,11 @@ void hexagonitem::set_m_type(int m){
 QColor hexagonitem::getBaseColor() const
 {
     switch(m_type) {
-    case 1: return Qt::green;
-    case 2: return Qt::red;
-    case 3: return Qt::blue;
-    case 4: return Qt::black;
-    case 5: return Qt::black;
+    case 1: return QColor("#1E90FF");
+    case 2: return QColor("#FF4500");
+    case 3: return QColor("#5DADE2");
+    case 4: return QColor("#7D7D7D");
+    case 5: return QColor("#A9DFBF");
     case 6: return QColor(205, 134, 134);
     case 7: return QColor(50, 100, 18);
     case 8: return QColor(60, 60, 160);
@@ -205,7 +206,7 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
        }
 
        if(owner == 1){
-           QPen pen(Qt::green);
+           QPen pen(QColor("#191970"));
            pen.setWidth(4); // ضخامت واضح
            painter->setPen(pen);
            painter->setBrush(Qt::NoBrush); // فقط خط دور، بدون پر کردن

@@ -3,6 +3,7 @@
 flying::flying(QString n, qreal size, int type, game_page* gamePage, QGraphicsItem* parent)
   : agent(n, size, type, gamePage, parent) {}
 
+// project done
 
 bool flying::walk_ground(){
     return true;

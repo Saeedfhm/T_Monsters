@@ -1,0 +1,96 @@
+void game_page::replacement(int row , int col , hexagonitem *h ,agent* attacker) {
+    if (!attacker) return;
+
+    QVector<QVector<bool>> visited(5 , QVector<bool>(9 , false));
+    QQueue<hexagonitem*> q;
+    QVector<QVector<int>> dist(5 , QVector<int>(9 , 0));
+
+
+    q.push_back(hexGrid[row][col]);
+    visited[row][col] = true;
+
+    bool found = false;
+
+    int r;
+    int c;
+
+    int hr = h->get_m_row();
+    int hc = h->get_m_col();
+    while (!found) {
+        hexagonitem* current = q.front();
+        q.pop_front();
+
+        for (hexagonitem* neighbor : current->neghibours) {
+            int nrow = neighbor->get_m_row();
+            int ncol = neighbor->get_m_col();
+
+            if (!visited[nrow][ncol]) {
+                visited[nrow][ncol] = true;
+
+                int type = neighbor->get_m_type();
+                bool can_stay = true;
+
+                if (type == 3 && !attacker->stay_water()) can_stay = false;
+                if (type == 4 && !attacker->stay_mountain()) can_stay = false;
+                if (type == 5 && !attacker->stay_ground()) can_stay = false;
+
+                if (can_stay && neighbor->placed_agent == nullptr) {
+                    found = true;
+                    q.push_back(neighbor);
+                  }
+                }
+            }
+        }
+
+        if(found){
+
+            int min = 45;
+            int row = h->get_m_row();
+            int col = h->get_m_col();
+
+            dist[row][col] = 0;
+
+            while (!q.empty()) {
+                QVector<QVector<bool>> visited(5 , QVector<bool>(9 , false));
+                QVector<QVector<int>> dist(5 , QVector<int>(9 , 0));
+                QQueue<QPair<int , int>> q1;
+                hexagonitem *h1 = q.front();
+                q.pop_front();
+                int nrow = h1->get_m_row();
+                int ncol = h1->get_m_col();
+
+                
+                dist[nrow][ncol] = 0;
+
+                while (!q1.empty()) {
+                    for(int i = 0; i < q1.size(); i++){
+                        hexagonitem *h2 = h1->neghibours[i];
+                        int r = h2->get_m_row();
+                        int c = h2->get_m_col();
+                        if(r==row && c == col){
+                            if(dist[r][c] < min){
+                                min = dist[r][c];
+                                hexGrid[r][c]->placed_agent = attacker;
+                                h->placed_agent = nullptr;
+                                h->set_pixmap("");
+                                h->owner = 0;
+                                hexGrid[hr][hc]->owner = (currentPlayer == 1 ? 2 : 1);
+                                QString path = attacker->Get_Name();
+                                hexGrid[hr][hc]->set_pixmap(":/" + path + ".webp");
+                                hexGrid[hr][hc]->update();
+                            }
+                        }
+                        else {
+                            dist[r][c] = dist[nrow][ncol] + 1;
+                            q1.push_back({r , c});
+                        }
+
+                    }
+                }
+            }
+            return;
+        }
+
+    if (ui && ui->Message)
+        ui->Message->setText("جایگزینی ممکن نیست - جایی مناسب برای این agent یافت نشد.");
+}

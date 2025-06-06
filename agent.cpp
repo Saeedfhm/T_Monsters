@@ -12,6 +12,7 @@
 #include <QPainter>
 #include "game_page.h"
 
+// project done
 
 agent::agent(QString n , qreal size, int type, game_page* gamePage, QGraphicsItem *parent)
     :   QObject(),

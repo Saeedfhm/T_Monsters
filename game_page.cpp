@@ -7,6 +7,8 @@
 #include <QtMultimedia>
 #include <QSoundEffect>
 #include <QDebug>
+#include <QVector>
+#include <algorithm>
 #include <QObject>
 #include <QRandomGenerator>
 #include <QFile>
@@ -24,6 +26,8 @@
 #include <flying.h>
 #include <floating.h>
 #include "agent.h"
+
+// project done
 
 game_page::game_page(QWidget *parent) :
     QMainWindow(parent),
@@ -514,7 +518,8 @@ void game_page::set_name(const QString &name1, const QString & name2){
 
 void game_page::on_load_game_btn_clicked()
 {
-    parse("D:/barname_sazi/project(c++)/tacticalmonster2025_f2_v2/grid2.txt");
+    int r = rand() % 8 + 1;
+    parse("D:/barname_sazi/project(c++)/tacticalmonster2025_f2_v2/grid" + QString::number(r) + ".txt");
     ui->load_game_btn->setDisabled(true);
 }
 
@@ -592,10 +597,169 @@ void game_page::removerange(){
         }
 }
 
+void game_page::replacement(int row, int col, hexagonitem *h, agent* attacker) {
+    if (!attacker) return;
+
+    for (hexagonitem* neighbor : h->neghibours) {
+        agent* other = neighbor->placed_agent;
+        if (other != nullptr && other != attacker) {
+            return;
+        }
+    }
+
+    if(hexGrid[row][col]->placed_agent == nullptr) return;
+
+    QVector<QVector<bool>> visited(5, QVector<bool>(9, false));
+    QQueue<hexagonitem*> q;
+
+    q.push_back(hexGrid[row][col]);
+    visited[row][col] = true;
+
+    QVector<hexagonitem*> candidates;
+
+    while (!q.isEmpty()) {
+        hexagonitem* current = q.front();
+        q.pop_front();
+
+        for (hexagonitem* neighbor : current->neghibours) {
+            int nrow = neighbor->get_m_row();
+            int ncol = neighbor->get_m_col();
+
+            if (!visited[nrow][ncol]) {
+                visited[nrow][ncol] = true;
+
+                int type = neighbor->get_m_type();
+                bool can_stay = true;
+
+                if (type == 3 && !attacker->stay_water()) can_stay = false;
+                if (type == 4 && !attacker->stay_mountain()) can_stay = false;
+                if (type == 5 && !attacker->stay_ground()) can_stay = false;
+
+                if (can_stay && neighbor->placed_agent == nullptr) {
+                    candidates.push_back(neighbor); // خانه‌های معتبر
+                }
+
+                q.push_back(neighbor);
+            }
+        }
+    }
+
+    if (candidates.isEmpty()) {
+        if (ui && ui->Message)
+            ui->Message->setText("جایگزینی ممکن نیست - جایی مناسب برای این agent یافت نشد.");
+        return;
+    }
+
+    int minDist = INT_MAX;
+    hexagonitem* bestTarget = nullptr;
+
+    for (hexagonitem* target : candidates) {
+        QVector<QVector<bool>> visited(5, QVector<bool>(9, false));
+        QVector<QVector<int>> dist(5, QVector<int>(9, 0));
+        QQueue<hexagonitem*> q1;
+
+        int sr = h->get_m_row();
+        int sc = h->get_m_col();
+        visited[sr][sc] = true;
+
+        q1.push_back(h);
+
+        while (!q1.isEmpty()) {
+            hexagonitem* current = q1.front();
+            q1.pop_front();
+
+            int r = current->get_m_row();
+            int c = current->get_m_col();
+
+            for (hexagonitem* neighbor : current->neghibours) {
+                int nr = neighbor->get_m_row();
+                int nc = neighbor->get_m_col();
+
+                if (!visited[nr][nc]) {
+                    visited[nr][nc] = true;
+                    dist[nr][nc] = dist[r][c] + 1;
+
+                    if (neighbor == target) {
+                        if (dist[nr][nc] < minDist) {
+                            minDist = dist[nr][nc];
+                            bestTarget = neighbor;
+                        }
+                    } else {
+                        q1.push_back(neighbor);
+                    }
+                }
+            }
+        }
+    }
+
+    if (bestTarget) {
+        int tr = bestTarget->get_m_row();
+        int tc = bestTarget->get_m_col();
+        bestTarget->placed_agent = attacker;
+        h->placed_agent = nullptr;
+        h->set_pixmap("");
+        h->owner = 0;
+
+        hexGrid[tr][tc]->owner = (currentPlayer == 1 ? 2 : 1);
+        QString path = attacker->Get_Name();
+        hexGrid[tr][tc]->set_pixmap(":/" + path + ".webp");
+        hexGrid[tr][tc]->update();
+    } else {
+        if (ui && ui->Message)
+            ui->Message->setText("جایگزینی ممکن نیست - مسیر مناسب پیدا نشد.");
+    }
+}
+
+void game_page::showVictoryScene(int winner) {
+    // 1. پیام متنی
+    QGraphicsTextItem* victoryText = new QGraphicsTextItem();
+    victoryText->setPlainText("🏆 Player " + QString::number(winner) + " Wins! 🏆");
+    victoryText->setDefaultTextColor(Qt::yellow);
+    victoryText->setFont(QFont("Montserrat", 40, QFont::Bold));
+    victoryText->setZValue(1000);
+    victoryText->setPos(150, 180);
+    scene->addItem(victoryText);
+
+    // 2. افکت شفافیت
+    QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+    victoryText->setGraphicsEffect(effect);
+
+    QPropertyAnimation* animation = new QPropertyAnimation(effect, "opacity");
+    animation->setDuration(2000);
+    animation->setStartValue(0.0);
+    animation->setEndValue(1.0);
+    animation->setEasingCurve(QEasingCurve::OutCubic);
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+    // 3. صدای پیروزی
+    QSoundEffect* victorySound = new QSoundEffect(this);
+    victorySound->setSource(QUrl::fromLocalFile(":/sounds/orchestral-win-331233.wav"));
+    victorySound->setVolume(0.8);
+    victorySound->play();
+
+    // 4. دکمه "بازی مجدد"
+    //    QPushButton* replayButton = new QPushButton("بازی مجدد", this);
+    //    replayButton->setGeometry(200, 300, 120, 40);
+    //    replayButton->show();
+    //    connect(replayButton, &QPushButton::clicked, this, &game_page::resetGame);
+
+    QPushButton* exitButton = new QPushButton("خروج", this);
+    exitButton->setGeometry(540, 380, 120, 40);
+    exitButton->show();
+
+    connect(exitButton, &QPushButton::clicked, this, &QWidget::close);
+
+    // پایان بازی
+    gameOver = true;
+    turnTimer->stop();
+}
+
 void game_page::BFS(int r , int c , int mb , int ar){
+    QVector<QVector<hexagonitem*>> parent(5, QVector<hexagonitem*>(9, nullptr));
     QVector<QVector<bool>> visited(5 , QVector<bool>(9 , false));
     QVector<QVector<int>> dist(5 , QVector<int>(9 , 0));
     QQueue <hexagonitem *> q;
+
 
     if(hexGrid[r][c]->placed_agent==nullptr) return;
 
@@ -619,6 +783,7 @@ void game_page::BFS(int r , int c , int mb , int ar){
             bool c2 = true;
             bool c3 = true;
             if(visited[nrow][ncol] == false){
+                parent[nrow][ncol] = p;
                 dist[nrow][ncol] = dist[row][col] + 1;
                 if(hexGrid[nrow][ncol]->get_m_type() == 3){
                     if(!walkwater) c1 = false;
@@ -642,146 +807,6 @@ void game_page::BFS(int r , int c , int mb , int ar){
             }
         }
     }
-}
-
-void game_page::replacement(int row , int col , hexagonitem *h ,agent* attacker) {
-    if (!attacker) return;
-
-    QVector<QVector<bool>> visited(5 , QVector<bool>(9 , false));
-    QQueue<hexagonitem*> q;
-
-    q.push_back(hexGrid[row][col]);
-    visited[row][col] = true;
-
-    while (!q.isEmpty()) {
-        hexagonitem* current = q.front();
-        q.pop_front();
-        bool found = false;
-        int minrowdis = 45;
-        int mincoldis = 45;
-
-        int r;
-        int c;
-
-        int hr = h->get_m_row();
-        int hc = h->get_m_col();
-        for (hexagonitem* neighbor : current->neghibours) {
-            int nrow = neighbor->get_m_row();
-            int ncol = neighbor->get_m_col();
-
-            if (!visited[nrow][ncol]) {
-                visited[nrow][ncol] = true;
-
-                int type = neighbor->get_m_type();
-                bool can_stay = true;
-
-                if (type == 3 && !attacker->stay_water()) can_stay = false;
-                if (type == 4 && !attacker->stay_mountain()) can_stay = false;
-                if (type == 5 && !attacker->stay_ground()) can_stay = false;
-
-                if (can_stay && neighbor->placed_agent == nullptr) {
-
-                    found = true;
-
-                    int deltar = abs(r - hr);
-                    int deltac = abs(c - hc);
-
-                    r = neighbor->get_m_row();
-                    c = neighbor->get_m_col();
-
-                   if(deltar <= minrowdis && deltac <= mincoldis){
-                       minrowdis = deltar;
-                       mincoldis = deltac;
-                       hr = r;
-                       hc = c;
-                  }
-                }
-                else {
-                    q.push_back(neighbor);
-                }
-            }
-        }
-
-        if(found){
-//            neighbor->placed_agent = attacker;
-//            neighbor->owner = (currentPlayer == 1 ? 2 : 1);
-
-//            // حذف از مکان قبلی
-//            h->placed_agent = nullptr;
-
-//            h->set_pixmap("");
-//            h->owner = 0;
-
-//            // نمایش عکس agent
-//            QString path = attacker->Get_Name();
-//            neighbor->set_pixmap(":/" + path + ".webp");
-
-//            neighbor->update();
-//            hexGrid[nrow][ncol]->update();
-
-
-            hexGrid[hr][hc]->placed_agent = attacker;
-            hexGrid[hr][hc]->owner = (currentPlayer == 1 ? 2 : 1);
-
-            h->placed_agent = nullptr;
-            h->set_pixmap("");
-            h->owner = 0;
-            QString path = attacker->Get_Name();
-            hexGrid[hr][hc]->set_pixmap(":/" + path + ".webp");
-            hexGrid[hr][hc]->update();
-            return;
-        }
-
-    }
-
-    if (ui && ui->Message)
-        ui->Message->setText("جایگزینی ممکن نیست - جایی مناسب برای این agent یافت نشد.");
-}
-
-void game_page::showVictoryScene(int winner) {
-    // 1. پیام متنی
-    QGraphicsTextItem* victoryText = new QGraphicsTextItem();
-    victoryText->setPlainText("🏆 Player " + QString::number(winner) + " Wins! 🏆");
-    victoryText->setDefaultTextColor(Qt::yellow);
-    victoryText->setFont(QFont("B Nazanin", 40, QFont::Bold));
-    victoryText->setZValue(1000);
-    victoryText->setPos(150, 180);
-    scene->addItem(victoryText);
-
-    // 2. افکت شفافیت
-    QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
-    victoryText->setGraphicsEffect(effect);
-
-    QPropertyAnimation* animation = new QPropertyAnimation(effect, "opacity");
-    animation->setDuration(2000);
-    animation->setStartValue(0.0);
-    animation->setEndValue(1.0);
-    animation->setEasingCurve(QEasingCurve::OutCubic);
-    animation->start(QAbstractAnimation::DeleteWhenStopped);
-
-    // 3. صدای پیروزی
-    QSoundEffect* victorySound = new QSoundEffect(this);
-    victorySound->setSource(QUrl::fromLocalFile(":/sounds/orchestral-win-331233.wav"));
-    victorySound->setVolume(0.8);
-    victorySound->play();
-
-    // 4. دکمه "بازی مجدد"
-//    QPushButton* replayButton = new QPushButton("بازی مجدد", this);
-//    replayButton->setGeometry(200, 300, 120, 40);
-//    replayButton->show();
-
-//    connect(replayButton, &QPushButton::clicked, this, &game_page::resetGame);
-
-    // 5. دکمه خروج
-    QPushButton* exitButton = new QPushButton("خروج", this);
-    exitButton->setGeometry(540, 380, 120, 40);
-    exitButton->show();
-
-    connect(exitButton, &QPushButton::clicked, this, &QWidget::close);
-
-    // پایان بازی
-    gameOver = true;
-    turnTimer->stop();
 }
 
 void game_page::handleHexagonClick(int row, int col) {
@@ -831,6 +856,7 @@ void game_page::handleHexagonClick(int row, int col) {
     if(hexGrid[row][col]->placed_agent==nullptr && count >= 10){
         if ((currentPlayer == 1 &&  hexGrid[row][col]->owner == 0 && hexGrid[row][col]->is_inRange) ||
             (currentPlayer == 2 &&  hexGrid[row][col]->owner == 0 && hexGrid[row][col]->is_inRange)) {
+
                 bool staywater = temph->placed_agent->stay_water();
                 bool staymountain = temph->placed_agent->stay_mountain();
                 bool stayground = temph->placed_agent->stay_ground();
@@ -852,6 +878,7 @@ void game_page::handleHexagonClick(int row, int col) {
                 }
 
                 if(c1 && c2 && c3){
+
                     hexGrid[row][col]->placed_agent=tempAgent;
                     QString path = hexGrid[row][col]->placed_agent->Get_Name();
                     hexGrid[row][col]->set_pixmap(":/" + path + ".webp");

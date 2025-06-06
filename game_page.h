@@ -89,6 +89,8 @@ public:
 
     bool gameOver = false;
 
+    void animateMoveStep();
+
     ~game_page();
 
 private slots:
@@ -100,7 +102,11 @@ private slots:
 private:
     int hrows;
     int hcols;
+    QVector<QVector<hexagonitem*>> parent;
     Ui::game_page *ui;
+    QVector<hexagonitem*> movePath;
+    int moveStep = 0;
+    QTimer* moveTimer;
     QGraphicsView *graphicsView;
     QGraphicsScene *scene;
     QVector<QVector<hexagonitem*>> hexGrid;
@@ -113,6 +119,7 @@ private:
     agent *selectedAgent;
     agent *tempAgent = nullptr;
     QVector<QString> agents_name;
+    QVector<hexagonitem*> reconstructPath(hexagonitem* start, hexagonitem* end, const QVector<QVector<hexagonitem*>>& parent);
     bool a_t = false;
     int type;
 };

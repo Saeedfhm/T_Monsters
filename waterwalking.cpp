@@ -3,6 +3,8 @@
 #include <QGraphicsItem>
 #include <QString>
 
+// project done
+
 Waterwalking::Waterwalking(QString n, qreal size, int type, game_page* gamePage, QGraphicsItem* parent)
     : agent(n, size, type, gamePage, parent)
 {}
