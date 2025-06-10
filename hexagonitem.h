@@ -4,6 +4,10 @@
 #pragma once
 #include <QObject>
 #include <QGraphicsPolygonItem>
+#include <QPropertyAnimation>
+#include <QGraphicsProxyWidget>
+#include <QLabel>
+#include <QPropertyAnimation>
 #include <QColor>
 #include <QPolygonF>
 #include <QPointF>
@@ -61,17 +65,15 @@ public:
     }
 
     void set_pixmap(const QString path) {pixmap.load(path);}
-
-
+    void show_info();
+    QString print();
     QPointF Pos;
-
     agent* placed_agent;
-    int owner = 0;
     QVector<hexagonitem*> neghibours;
 
+    int owner = 0;
     bool is_inRange = false;
     bool is_inAttackRange = false;
-
 
 signals:
     void clicked(hexagonitem* self);
@@ -92,14 +94,12 @@ private:
   bool m_isHighlighted;
   int m_row;
   int m_col;
-
   int m_type;
   qreal x;
   qreal y;
   qreal m_size;
   QColor getBaseColor() const;
   QPixmap pixmap;
-  QString path;
 
 
 };

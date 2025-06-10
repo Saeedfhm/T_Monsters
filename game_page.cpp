@@ -1,5 +1,5 @@
-#include "game_page.h"
 #include "ui_game_page.h"
+#include "game_page.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsOpacityEffect>
@@ -781,28 +781,36 @@ void game_page::BFS(int r , int c , int mb , int ar){
             hexagonitem* n = p->neghibours[i];
             int nrow = n->get_m_row();
             int ncol = n->get_m_col();
-            bool c1 = true;
-            bool c2 = true;
-            bool c3 = true;
+            bool can_walk = true;
+
             if(visited[nrow][ncol] == false){
+                visited[nrow][ncol] = true;
                 parent[nrow][ncol] = p;
                 dist[nrow][ncol] = dist[row][col] + 1;
+                if(hexGrid[nrow][ncol]->get_m_type() == 6){
+                    can_walk = false;
+                }
                 if(hexGrid[nrow][ncol]->get_m_type() == 3){
-                    if(!walkwater) c1 = false;
+                    if(!walkwater) can_walk = false;
                 }
 
                 if(hexGrid[nrow][ncol]->get_m_type() == 4){
-                    if(!walkmountain) c2 = false;
+                    if(!walkmountain) can_walk = false;
                 }
 
                 if(hexGrid[nrow][ncol]->get_m_type() == 5){
-                    if(!walkground) c3 = false;
+                    if(!walkground) can_walk = false;
                 }
-                if(dist[nrow][ncol] <= mb && hexGrid[nrow][ncol]->placed_agent==nullptr && c1 && c2 && c3){
+
+                bool can_stay = true;
+                if(hexGrid[nrow][ncol]->get_m_type() == 3 && hexGrid[r][c]->placed_agent && !hexGrid[r][c]->placed_agent->stay_water()) can_stay = false;
+                if(hexGrid[nrow][ncol]->get_m_type() == 4 && hexGrid[r][c]->placed_agent && !hexGrid[r][c]->placed_agent->stay_mountain()) can_stay = false;
+                if(hexGrid[nrow][ncol]->get_m_type() == 5 && hexGrid[r][c]->placed_agent && !hexGrid[r][c]->placed_agent->stay_ground()) can_stay = false;
+
+                if(dist[nrow][ncol] <= mb && hexGrid[nrow][ncol]->placed_agent==nullptr && can_walk){
                     q.push_back(n);
-                    hexGrid[nrow][ncol]->is_inRange = true;
-                    hexGrid[nrow][ncol]->update();
-                    visited[nrow][ncol] = true;
+                    if(can_stay) hexGrid[nrow][ncol]->is_inRange = true;
+                    else hexGrid[nrow][ncol]->is_inRange = false;
                 }
                 if(dist[nrow][ncol] <= ar && hexGrid[nrow][ncol]->placed_agent && hexGrid[nrow][ncol]->owner!=currentPlayer) hexGrid[nrow][ncol]->is_inAttackRange = true;
                 hexGrid[nrow][ncol]->update();
@@ -854,13 +862,6 @@ void game_page::handleHexagonClick(int row, int col) {
          tempAgent = nullptr;
          return;
      }
-
-//     if(selectedAgent == hexGrid[row][col]->placed_agent && count < 10){
-//         temph = nullptr;
-//         removerange();
-//         qDebug() << "another place" ;
-//         return;
-//     }
 
      // ------------ second click after arangment of agents(move operation) ------------------
     if(hexGrid[row][col]->placed_agent==nullptr && count >= 10){
@@ -914,7 +915,6 @@ void game_page::handleHexagonClick(int row, int col) {
 
 
     // ------------ second click after arangment of agents(attack operation) ----------------------
-
     if(hexGrid[row][col]->placed_agent!=nullptr && count >= 10){
         if (((currentPlayer == 1 &&  hexGrid[row][col]->owner == 2) ||
             (currentPlayer == 2 &&  hexGrid[row][col]->owner == 1)) && hexGrid[row][col]->is_inAttackRange) {
@@ -931,6 +931,7 @@ void game_page::handleHexagonClick(int row, int col) {
 
                 if(hexGrid[row][col]->placed_agent->Get_Hp() <= 0) {
                     hexGrid[row][col]->placed_agent = nullptr;
+                    hexGrid[row][col]->set_m_type(6);
                     hexGrid[row][col]->owner = 0;
                     ui->Message->setText("Agent " + defender + " died in " + QString::number(row) + " , " + QString::number(col));
                     if(currentPlayer == 1) p2_count--;
@@ -938,11 +939,12 @@ void game_page::handleHexagonClick(int row, int col) {
                 }
                 bool both = false;
                 if(temph->placed_agent->Get_Hp() <= 0){
-                    ui->Message->setText("Agent " + defender + " died in " + QString::number(row) + " , " + QString::number(col));
+                    ui->Message->setText("Agent " + attacker + " died in " + QString::number(row) + " , " + QString::number(col));
                     int r = temph->get_m_row();
                     int c = temph->get_m_col();
                     hexGrid[r][c]->owner = 0;
                     hexGrid[r][c]->placed_agent = nullptr;
+                    hexGrid[r][c]->set_m_type(6);
                     temph = nullptr;
                     if(currentPlayer == 1) p1_count--;
                     if(currentPlayer == 2) p2_count--;

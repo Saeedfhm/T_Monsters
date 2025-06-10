@@ -322,7 +322,7 @@ border-radius: 45px;</string>
                <item>
                 <widget class="QLabel" name="Message">
                  <property name="styleSheet">
-                  <string notr="true">font: 75 20pt &quot;Constantia&quot;;</string>
+                  <string notr="true">font: 75 15pt &quot;Constantia&quot;;</string>
                  </property>
                  <property name="text">
                   <string/>

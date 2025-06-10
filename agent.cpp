@@ -9,6 +9,7 @@
 #include <QPropertyAnimation>
 #include <QGraphicsItem>
 #include <QPen>
+#include <QTimer>
 #include <QPainter>
 #include "game_page.h"
 
@@ -42,7 +43,7 @@ QString agent::getInfoText() {
         .arg(Mobility)
         .arg(Damage)
         .arg(AttackRange);
-    }
+}
 
 void agent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -187,7 +188,7 @@ void agent::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if (event->button() == Qt::LeftButton && isEnabled() && m_gamePage) {
            m_gamePage->handleAgentClick(this);
 
-            qDebug() << "Mouse pressed on hex at row:" << a_row << "col:" << a_col;
+//            qDebug() << "Mouse pressed on hex at row:" << a_row << "col:" << a_col;
 
     }
     //emit clicked(this);
@@ -222,6 +223,7 @@ void agent::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     fade_anim->start();
     QGraphicsPolygonItem::hoverEnterEvent(event);
 }
+
 
 void agent::setupInfoWidget()
 {
@@ -262,3 +264,5 @@ void agent::setHighlight(bool highlight)
     a_isHighlighted = highlight;
     update();
 }
+
+

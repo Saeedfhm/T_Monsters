@@ -157,4 +157,3 @@ void login::onItemClicked(QListWidgetItem *item){
         gp->show();
     }
 }
-

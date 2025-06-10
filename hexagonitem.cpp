@@ -27,7 +27,7 @@ QColor typeToColor(int type) {
     }
 }
 hexagonitem::hexagonitem(qreal size, int type, game_page* gamePage, QGraphicsItem *parent)
-    : QGraphicsPolygonItem(parent),  
+    : QGraphicsPolygonItem(parent),
     m_gamePage(gamePage),
     m_type(type),
     m_size(size)
@@ -228,7 +228,21 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
            painter->setBrush(Qt::NoBrush);
            painter->drawPolygon(polygon());
        }
+
+       if (m_type == 6) {
+           painter->setRenderHint(QPainter::Antialiasing);
+           painter->setPen(QPen(Qt::red, 3));
+
+           QRectF rect = boundingRect();
+           qreal marginX = rect.width() * 0.2;
+           qreal marginY = rect.height() * 0.2;
+
+           QPointF topLeft = rect.topLeft() + QPointF(marginX, marginY);
+           QPointF topRight = rect.topRight() + QPointF(-marginX, marginY);
+           QPointF bottomLeft = rect.bottomLeft() + QPointF(marginX, -marginY);
+           QPointF bottomRight = rect.bottomRight() + QPointF(-marginX, -marginY);
+
+           painter->drawLine(topLeft, bottomRight);
+           painter->drawLine(topRight, bottomLeft);
+       }
 }
-
-
-
