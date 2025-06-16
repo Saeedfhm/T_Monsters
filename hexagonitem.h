@@ -71,7 +71,7 @@ public:
     agent* placed_agent;
     QVector<hexagonitem*> neghibours;
 
-    int owner = 0;
+    int owner;
     bool is_inRange = false;
     bool is_inAttackRange = false;
 

@@ -87,6 +87,7 @@ public:
      void set_aname(QString n) { a_name = n; }
      void set_pixmap(const QString path) {pixmap.load(path);}
 signals:
+    void hovered(agent* Agent);
     void clicked(agent* self);
 protected:
 

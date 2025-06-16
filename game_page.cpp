@@ -76,8 +76,6 @@ game_page::game_page(QWidget *parent) :
     targetHex = nullptr;
     ui->vw1->setDragMode(QGraphicsView::NoDrag);
     turnTimer = new QTimer(this);
-//    connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
-//    startPlayerTurn();
     if(count == 10) ui->Message->setText("Pls click start button to start the game");
 }
 
@@ -395,6 +393,7 @@ void game_page::create_board(){
              hexGrid[row][col] = {
                  hex
                 };
+              hexGrid[row][col]->owner = 0;
               hexGrid[row][col]->set_x(x);
               hexGrid[row][col]->set_y(y);
               hexGrid[row][col]->Pos.setX(x);
@@ -589,6 +588,9 @@ void game_page::agentSelected(agent* selected)
      }
 
      selectedAgent = selected;
+     ui->Message->setText(selected->Get_Name() + " selected with" + " HP : " + QString::number(selected->Get_Hp())
+      + " , Mobility : " + QString::number(selected->Get_Mobility()) + "\n  Damage : " + QString::number(selected->Get_Damage())
+      + ", Range : " + QString::number(selected->Get_AttackRange()));
      if(selectedAgent->Get_IsAselected()) selectedAgent->Set_IsAselected(false);
      else  selectedAgent->Set_IsAselected(true);
 }
@@ -835,7 +837,7 @@ void game_page::handleHexagonClick(int row, int col) {
          return;
      }
      // ------------move_after_arrange------------
-     if(hexGrid[row][col]->placed_agent==nullptr && count >= 10) move_after_arrange(row , col);
+     if(hexGrid[row][col]->placed_agent==nullptr && hexGrid[row][col]->owner == 0 && count >= 10 && hexGrid[row][col]->is_inRange && tempAgent && temph) move_after_arrange(row , col);
 
      //------------attack------------
      if(hexGrid[row][col]->placed_agent!=nullptr && count >= 10 && temph) {
@@ -844,7 +846,7 @@ void game_page::handleHexagonClick(int row, int col) {
      }
 
      //------------move_befor_arrange------------
-     if ((currentPlayer == 1 &&  hexGrid[row][col]->get_m_type() == 1) ||(currentPlayer == 2 &&  hexGrid[row][col]->get_m_type() == 2)) move_before_arrange(row , col);
+     if (currentPlayer == hexGrid[row][col]->get_m_type() && count < 10 ) move_before_arrange(row , col);
 }
 
 void game_page::selec_agent(int row, int col){
@@ -865,7 +867,8 @@ bool game_page::check_conditions(int row, int col){
 
     if(hexGrid[row][col]->placed_agent){
         msg = hexGrid[row][col]->placed_agent->Get_Name() + " selected with" + " HP : " + QString::number(hexGrid[row][col]->placed_agent->Get_Hp())
-                + " , Mobility : " + QString::number(hexGrid[row][col]->placed_agent->Get_Mobility()) + "\n  Range : " + QString::number(hexGrid[row][col]->placed_agent->Get_Damage());
+        + " , Mobility : " + QString::number(hexGrid[row][col]->placed_agent->Get_Mobility()) + "\n  Damage : " + QString::number(hexGrid[row][col]->placed_agent->Get_Damage())
+        + ", Range : " + QString::number(hexGrid[row][col]->placed_agent->Get_AttackRange());
     }else msg = "";
 
     if (count < 10) {
@@ -904,29 +907,31 @@ bool game_page::check_conditions(int row, int col){
 }
 
 void game_page::move_after_arrange(int row, int col){
-    if ((currentPlayer == 1 &&  hexGrid[row][col]->owner == 0 && hexGrid[row][col]->is_inRange) ||
-        (currentPlayer == 2 &&  hexGrid[row][col]->owner == 0 && hexGrid[row][col]->is_inRange)) {
+
+    if(!hexGrid[row][col]->is_inRange){
+        ui->Message->setText("far hexagon");
+    }else{
         bool staywater = temph->placed_agent->stay_water();
         bool staymountain = temph->placed_agent->stay_mountain();
         bool stayground = temph->placed_agent->stay_ground();
 
-        bool c1 = true;
-        bool c2 = true;
-        bool c3 = true;
+        bool can_stay = true;
+
+        if(hexGrid[row][col]->get_m_type() == 6) can_stay = false;
 
         if(hexGrid[row][col]->get_m_type() == 3){
-            if(!staywater) c1 = false;
+            if(!staywater) can_stay = false;
         }
 
         if(hexGrid[row][col]->get_m_type() == 4){
-            if(!staymountain) c2 = false;
+            if(!staymountain) can_stay = false;
         }
 
         if(hexGrid[row][col]->get_m_type() == 5){
-            if(!stayground) c3 = false;
+            if(!stayground) can_stay = false;
         }
 
-        if(c1 && c2 && c3){
+        if(can_stay){
             hexGrid[row][col]->placed_agent=tempAgent;
             QString path = hexGrid[row][col]->placed_agent->Get_Name();
             hexGrid[row][col]->set_pixmap(":/" + path + ".webp");
@@ -939,11 +944,12 @@ void game_page::move_after_arrange(int row, int col){
             temph = nullptr;
             tempAgent = nullptr;
             removerange();
-            return;
+            }
+        else{
+            ui->Message->setText("Invalid place");
+            temph = nullptr;
+            tempAgent = nullptr;
         }
-    }else{
-        ui->Message->setText("far hexagon");
-        return;
     }
 }
 
@@ -1041,3 +1047,4 @@ void game_page::on_start_game_clicked(){
     }
 
 }
+

@@ -38,7 +38,6 @@ public:
     void attack(int row , int col);
     bool check_conditions(int row , int col);
 
-
     void removerange();
 
     // even array
@@ -98,6 +97,7 @@ public:
     void animateMoveStep();
 
     ~game_page();
+
 
 private slots:
 

@@ -206,21 +206,23 @@ void agent::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void agent::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    info_label->setText(getInfoText());
-    info_label->setWordWrap(true);
-    info_label->adjustSize();
+//    info_label->setText(getInfoText());
+//    info_label->setWordWrap(true);
+//    info_label->adjustSize();
 
-    QRectF bounds = polygon().boundingRect();
-    QPointF pos = bounds.topRight() + QPointF(10, -10);
-    info_widget_proxy->setPos(pos);
-    info_widget_proxy->setOpacity(0.0);
-    info_widget_proxy->setVisible(true);
+//    QRectF bounds = polygon().boundingRect();
+//    QPointF pos = bounds.topRight() + QPointF(10, -10);
+//    info_widget_proxy->setPos(pos);
+//    info_widget_proxy->setOpacity(0.0);
+//    info_widget_proxy->setVisible(true);
 
 
-    fade_anim->stop();
-    fade_anim->setStartValue(0.0);
-    fade_anim->setEndValue(1.0);
-    fade_anim->start();
+//    fade_anim->stop();
+//    fade_anim->setStartValue(0.0);
+//    fade_anim->setEndValue(1.0);
+//    fade_anim->start();
+
+    emit hovered(this);
     QGraphicsPolygonItem::hoverEnterEvent(event);
 }
 
