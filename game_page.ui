@@ -249,7 +249,7 @@ border-radius: 15px;</string>
                 </size>
                </property>
                <property name="text">
-                <string>star</string>
+                <string>start</string>
                </property>
               </widget>
              </item>

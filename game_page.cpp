@@ -1,5 +1,5 @@
-#include "ui_game_page.h"
 #include "game_page.h"
+#include "ui_game_page.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsOpacityEffect>
@@ -600,12 +600,11 @@ void game_page::removerange(){
 }
 
 void game_page::replacement(int row, int col, hexagonitem *h, agent* attacker) {
-    if (!attacker) return;
 
-    for (hexagonitem* neighbor : h->neghibours) {
+    for (hexagonitem* neighbor : hexGrid[row][col]->neghibours) {
         agent* other = neighbor->placed_agent;
-        if (other != nullptr && other != attacker) {
-            return;
+        if (other != nullptr) {
+            if(other == attacker) return;
         }
     }
 
@@ -632,7 +631,7 @@ void game_page::replacement(int row, int col, hexagonitem *h, agent* attacker) {
 
                 int type = neighbor->get_m_type();
                 bool can_stay = true;
-
+                if(type==6) can_stay = false;
                 if (type == 3 && !attacker->stay_water()) can_stay = false;
                 if (type == 4 && !attacker->stay_mountain()) can_stay = false;
                 if (type == 5 && !attacker->stay_ground()) can_stay = false;
@@ -820,20 +819,20 @@ void game_page::BFS(int r , int c , int mb , int ar){
 }
 
 void game_page::handleHexagonClick(int row, int col) {
-    qDebug() << "Hex clicked at:" << row << "," << col;
+     qDebug() << "Hex clicked at:" << row << "," << col;
 
-    if (count < 10) {
+     if (count < 10) {
         // جلوگیری از گذاشتن agent روی agentهای قبلی خودی
         if (hexGrid[row][col]->placed_agent != nullptr) {
             ui->Message->setText("Hexagon already occupied. Choose another one.");
             return;
         }
-    }
+     }
 
-    if(hexGrid[row][col]->placed_agent == nullptr && count >= 10 && tempAgent == nullptr) return;
+     if(hexGrid[row][col]->placed_agent == nullptr && count >= 10 && tempAgent == nullptr) return;
 
-    if((currentPlayer == 1 && hexGrid[row][col]->owner == 2 && tempAgent== nullptr) || (currentPlayer == 2 && hexGrid[row][col]->owner == 1 && tempAgent== nullptr)) return;
-    // ------------ first click after arangment of agents in bord ------------------
+     if((currentPlayer == 1 && hexGrid[row][col]->owner == 2 && tempAgent== nullptr) || (currentPlayer == 2 && hexGrid[row][col]->owner == 1 && tempAgent== nullptr)) return;
+     // ------------ first click after arangment of agents in bord ------------------
      if(hexGrid[row][col]->placed_agent != nullptr && count >= 10 && tempAgent==nullptr) {
          if(ui->start_game->isEnabled()){
             ui->Message->setText("You have not Start the game");
@@ -845,15 +844,17 @@ void game_page::handleHexagonClick(int row, int col) {
                 tempAgent = hexGrid[row][col]->placed_agent;
                 int mb = hexGrid[row][col]->placed_agent->Get_Mobility();
                 int ar = hexGrid[row][col]->placed_agent->Get_AttackRange();
+                ui->Message->setText(hexGrid[row][col]->placed_agent->Get_Name() + " selected with" + " HP : " + QString::number(hexGrid[row][col]->placed_agent->Get_Hp())
+                + " , Mobility : " + QString::number(hexGrid[row][col]->placed_agent->Get_Mobility()) + "\n , Range : " + QString::number(hexGrid[row][col]->placed_agent->Get_AttackRange()) + " , Damage : " +
+                QString::number(hexGrid[row][col]->placed_agent->Get_Damage()));
                 BFS(row , col , mb , ar);
                 return;
          }
-    }
+     }
 
-     if((hexGrid[row][col]->owner == 1 && temph->owner == 1 && count >= 10 ) || (hexGrid[row][col]->owner == 2 && temph->owner == 2 && count >= 10 )){
-         removerange();
-         ui->Message->setText("Same owner. please chose another hexa");
-         tempAgent = nullptr;
+     if(hexGrid[row][col]->owner != currentPlayer && count > 10 && hexGrid[row][col]->placed_agent->Get_Hp() > 0 && hexGrid[row][col]->placed_agent != nullptr && temph == nullptr){
+         ui->Message->setText(hexGrid[row][col]->placed_agent->Get_Name() + " selected with" + " HP : " + QString::number(hexGrid[row][col]->placed_agent->Get_Hp())
+         + " , Mobility : " + QString::number(hexGrid[row][col]->placed_agent->Get_Mobility()) + "\n , Range : " + QString::number(hexGrid[row][col]->placed_agent->Get_Damage()));
          return;
      }
 
@@ -863,8 +864,16 @@ void game_page::handleHexagonClick(int row, int col) {
          return;
      }
 
+     if((hexGrid[row][col]->owner == 1 && temph->owner == 1 && count >= 10 && temph!= hexGrid[row][col]) || (hexGrid[row][col]->owner == 2 && temph->owner == 2 && count >= 10 && temph!= hexGrid[row][col])){
+         removerange();
+         ui->Message->setText("Same owner. please chose another hexa");
+         tempAgent = nullptr;
+         temph = nullptr;
+         return;
+     }
+
      // ------------ second click after arangment of agents(move operation) ------------------
-    if(hexGrid[row][col]->placed_agent==nullptr && count >= 10){
+     if(hexGrid[row][col]->placed_agent==nullptr && count >= 10){
         if ((currentPlayer == 1 &&  hexGrid[row][col]->owner == 0 && hexGrid[row][col]->is_inRange) ||
             (currentPlayer == 2 &&  hexGrid[row][col]->owner == 0 && hexGrid[row][col]->is_inRange)) {
 
@@ -907,55 +916,57 @@ void game_page::handleHexagonClick(int row, int col) {
             ui->Message->setText("far hexagon");
             return;
         }
-    }
+     }
 
-    // useless clicked
-    if (!selectedAgent && count < 10) return;
+     // useless clicked
+     if (!selectedAgent && count < 10) return;
 
 
 
-    // ------------ second click after arangment of agents(attack operation) ----------------------
-    if(hexGrid[row][col]->placed_agent!=nullptr && count >= 10){
+     // ------------ second click after arangment of agents(attack operation) ----------------------
+     if(hexGrid[row][col]->placed_agent!=nullptr && count >= 10){
         if (((currentPlayer == 1 &&  hexGrid[row][col]->owner == 2) ||
             (currentPlayer == 2 &&  hexGrid[row][col]->owner == 1)) && hexGrid[row][col]->is_inAttackRange) {
                 int Dam = temph->placed_agent->Get_Damage();
                 int hp =  hexGrid[row][col]->placed_agent->Get_Hp();
                 hp-=Dam;
-                temph->placed_agent->set_Hp(temph->placed_agent->Get_Hp() - hexGrid[row][col]->placed_agent->Get_Damage() / 2);
+                if(hp < 0) hp = 0;
+                int hp1 = temph->placed_agent->Get_Hp() - hexGrid[row][col]->placed_agent->Get_Damage() / 2;
+                if(hp1 < 0) hp1 = 0;
+                temph->placed_agent->set_Hp(hp1);
                 hexGrid[row][col]->placed_agent->set_Hp(hp);
                 QString defender = hexGrid[row][col]->placed_agent->Get_Name();
                 QString attacker = temph->placed_agent->Get_Name();
 
 
                 ui->Message->setText("Agent " + defender + " was defender Hp:  " + QString::number(hp) + "\nAgent " + attacker + " was attacker Hp:  " + QString::number(temph->placed_agent->Get_Hp()));
-
-                if(hexGrid[row][col]->placed_agent->Get_Hp() <= 0) {
+                bool defender_died = false;
+                if(hp == 0) {
                     hexGrid[row][col]->placed_agent = nullptr;
                     hexGrid[row][col]->set_m_type(6);
                     hexGrid[row][col]->owner = 0;
                     ui->Message->setText("Agent " + defender + " died in " + QString::number(row) + " , " + QString::number(col));
                     if(currentPlayer == 1) p2_count--;
                     if(currentPlayer == 2) p1_count--;
+                    defender_died  = true;
                 }
-                bool both = false;
-                if(temph->placed_agent->Get_Hp() <= 0){
+                bool attacker_died = false;
+                if(hp1 == 0){
                     ui->Message->setText("Agent " + attacker + " died in " + QString::number(row) + " , " + QString::number(col));
-                    int r = temph->get_m_row();
-                    int c = temph->get_m_col();
-                    hexGrid[r][c]->owner = 0;
-                    hexGrid[r][c]->placed_agent = nullptr;
-                    hexGrid[r][c]->set_m_type(6);
+                    temph->owner = 0;
+                    temph->placed_agent = nullptr;
+                    temph->set_m_type(6);
                     temph = nullptr;
                     if(currentPlayer == 1) p1_count--;
                     if(currentPlayer == 2) p2_count--;
-                    both = true;
+                    attacker_died = true;
                 }
 
                 hexGrid[row][col]->update();
                 turnTimer->stop();
                 switchPlayer();
                 tempAgent = nullptr;
-                if(!both) replacement(row , col , temph ,temph->placed_agent);
+                if(!attacker_died) replacement(row , col , temph ,temph->placed_agent);
                 removerange();
                 if(p1_count == 0 && p2_count > 0) showVictoryScene(2);
                 if(p1_count > 0 && p2_count == 0) showVictoryScene(1);
@@ -967,11 +978,8 @@ void game_page::handleHexagonClick(int row, int col) {
             return;
         }
     }
-
-
-
-    // ------------ first click for arangment of agents in bord ------------------
-    if ((currentPlayer == 1 &&  hexGrid[row][col]->get_m_type() == 1) ||
+     // ------------ first click for arangment of agents in bord ------------------
+     if ((currentPlayer == 1 &&  hexGrid[row][col]->get_m_type() == 1) ||
         (currentPlayer == 2 &&  hexGrid[row][col]->get_m_type() == 2)) {
 
         if(hexGrid[row][col]->placed_agent==nullptr) hexGrid[row][col]->placed_agent = selectedAgent;
@@ -988,7 +996,6 @@ void game_page::handleHexagonClick(int row, int col) {
 
         selectedAgent = nullptr;
 
-//        turnTimer->stop();
         switchPlayer();
 
         count++;
@@ -1014,6 +1021,7 @@ void game_page::set_agents_name(QString name){
 
 void game_page::on_start_game_clicked()
 {
+    if(count < 10) ui->Message->setText("You have not arrange your agents");
     ui->Message->setText("Game starts");
     connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
     startPlayerTurn();
