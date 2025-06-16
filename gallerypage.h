@@ -18,7 +18,8 @@ public:
     ~gallerypage();
 
 private slots:
-    void on_back_btn_clicked();
+
+    void on_back_clicked();
 
 private:
     Ui::gallerypage *ui;

@@ -56,7 +56,7 @@ void agent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     else if(a_type==2) painter->setPen(QPen(Qt::blue, 3));
 
     if (is_selected) {
-        QPen pen(Qt::red, 3);
+        QPen pen(Qt::red, 6);
         painter->setPen(pen);
         painter->drawPolygon(polygon());
     }

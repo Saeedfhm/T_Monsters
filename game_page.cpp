@@ -49,6 +49,9 @@ game_page::game_page(QWidget *parent) :
        "   color: white;"
        "   font: 75 25pt C059;"
        "}"
+       "QPushButton:hover {"
+       "   background-color: #2b5532;" /* تغییر رنگ هنگام هاور */
+       "}"
     );
 
     ui->load_game_btn->setFixedSize(100, 50);
@@ -59,6 +62,9 @@ game_page::game_page(QWidget *parent) :
         "   padding: 8px;"
         "   color: white;"
         "   font: 75 25pt C059;"
+        "}"
+        "QPushButton:hover {"
+        "   background-color: #2b5532;" /* تغییر رنگ هنگام هاور */
         "}"
     );
 
@@ -821,17 +827,21 @@ void game_page::BFS(int r , int c , int mb , int ar){
 void game_page::handleHexagonClick(int row, int col) {
      qDebug() << "Hex clicked at:" << row << "," << col;
 
-     if (count < 10) {
-        // جلوگیری از گذاشتن agent روی agentهای قبلی خودی
+     if (count < 10) {        
         if (hexGrid[row][col]->placed_agent != nullptr) {
             ui->Message->setText("Hexagon already occupied. Choose another one.");
             return;
         }
      }
 
+     if(hexGrid[row][col]->owner != currentPlayer && count >= 10 && hexGrid[row][col]->placed_agent && temph == nullptr && tempAgent == nullptr){
+         ui->Message->setText(hexGrid[row][col]->placed_agent->Get_Name() + " selected with" + " HP : " + QString::number(hexGrid[row][col]->placed_agent->Get_Hp())
+         + " , Mobility : " + QString::number(hexGrid[row][col]->placed_agent->Get_Mobility()) + "\n , Range : " + QString::number(hexGrid[row][col]->placed_agent->Get_Damage()));
+         return;
+     }
+
      if(hexGrid[row][col]->placed_agent == nullptr && count >= 10 && tempAgent == nullptr) return;
 
-     if((currentPlayer == 1 && hexGrid[row][col]->owner == 2 && tempAgent== nullptr) || (currentPlayer == 2 && hexGrid[row][col]->owner == 1 && tempAgent== nullptr)) return;
      // ------------ first click after arangment of agents in bord ------------------
      if(hexGrid[row][col]->placed_agent != nullptr && count >= 10 && tempAgent==nullptr) {
          if(ui->start_game->isEnabled()){
@@ -850,12 +860,6 @@ void game_page::handleHexagonClick(int row, int col) {
                 BFS(row , col , mb , ar);
                 return;
          }
-     }
-
-     if(hexGrid[row][col]->owner != currentPlayer && count > 10 && hexGrid[row][col]->placed_agent->Get_Hp() > 0 && hexGrid[row][col]->placed_agent != nullptr && temph == nullptr){
-         ui->Message->setText(hexGrid[row][col]->placed_agent->Get_Name() + " selected with" + " HP : " + QString::number(hexGrid[row][col]->placed_agent->Get_Hp())
-         + " , Mobility : " + QString::number(hexGrid[row][col]->placed_agent->Get_Mobility()) + "\n , Range : " + QString::number(hexGrid[row][col]->placed_agent->Get_Damage()));
-         return;
      }
 
      if(hexGrid[row][col] == temph){
@@ -908,6 +912,7 @@ void game_page::handleHexagonClick(int row, int col) {
                     hexGrid[row][col]->owner = currentPlayer;
                     switchPlayer();
                     temph->owner = 0;
+                    temph = nullptr;
                     tempAgent = nullptr;
                     removerange();
                     return;
@@ -921,10 +926,8 @@ void game_page::handleHexagonClick(int row, int col) {
      // useless clicked
      if (!selectedAgent && count < 10) return;
 
-
-
      // ------------ second click after arangment of agents(attack operation) ----------------------
-     if(hexGrid[row][col]->placed_agent!=nullptr && count >= 10){
+     if(hexGrid[row][col]->placed_agent!=nullptr && count >= 10 && temph){
         if (((currentPlayer == 1 &&  hexGrid[row][col]->owner == 2) ||
             (currentPlayer == 2 &&  hexGrid[row][col]->owner == 1)) && hexGrid[row][col]->is_inAttackRange) {
                 int Dam = temph->placed_agent->Get_Damage();
@@ -940,7 +943,6 @@ void game_page::handleHexagonClick(int row, int col) {
 
 
                 ui->Message->setText("Agent " + defender + " was defender Hp:  " + QString::number(hp) + "\nAgent " + attacker + " was attacker Hp:  " + QString::number(temph->placed_agent->Get_Hp()));
-                bool defender_died = false;
                 if(hp == 0) {
                     hexGrid[row][col]->placed_agent = nullptr;
                     hexGrid[row][col]->set_m_type(6);
@@ -948,7 +950,6 @@ void game_page::handleHexagonClick(int row, int col) {
                     ui->Message->setText("Agent " + defender + " died in " + QString::number(row) + " , " + QString::number(col));
                     if(currentPlayer == 1) p2_count--;
                     if(currentPlayer == 2) p1_count--;
-                    defender_died  = true;
                 }
                 bool attacker_died = false;
                 if(hp1 == 0){
@@ -1022,8 +1023,11 @@ void game_page::set_agents_name(QString name){
 void game_page::on_start_game_clicked()
 {
     if(count < 10) ui->Message->setText("You have not arrange your agents");
-    ui->Message->setText("Game starts");
-    connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
-    startPlayerTurn();
-    ui->start_game->setDisabled(true);
+    else{
+        ui->Message->setText("Game starts");
+        connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
+        startPlayerTurn();
+        ui->start_game->setDisabled(true);
+    }
+
 }
