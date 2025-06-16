@@ -144,7 +144,7 @@ gallerypage::gallerypage(QWidget *parent) :
 
     ui->Kabu->setText(
         "<table><tr>"
-        "<h2> Sirlimok</h2>"
+        "<h2> Kabu</h2>"
         "<td><img src=':/Kabu.webp' width='64' height='64'></td>"
         "<td style='padding-left:10px;'>"
         "HP: 320<`br>"
