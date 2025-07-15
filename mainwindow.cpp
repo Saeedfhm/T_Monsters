@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
         "   color: white"
         "}"
         "QPushButton:hover {"
-        "   background-color: #aaa510;" /* تغییر رنگ هنگام هاور */
+        "   background-color: #515100;"
         "}"
     );
 

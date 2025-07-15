@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include "game_page.h"
 #include <QListWidgetItem>
+#include <QMessageBox>
 
 // project done
 
@@ -124,6 +125,10 @@ login::~login()
 
 void login::on_game_btn_clicked()
 {
+    if(ui->P1_name->text() == "" || ui->P2_name->text() == ""){
+        QMessageBox::warning(this , "error" , "Please Fill Everything");
+        return;
+    }
 
     QString p1 = ui->P1_name->text();
     QString p2 = ui->P2_name->text();
@@ -156,4 +161,6 @@ void login::onItemClicked(QListWidgetItem *item){
         this->hide();
         gp->show();
     }
+
+
 }

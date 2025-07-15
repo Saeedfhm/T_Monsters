@@ -105,6 +105,7 @@ protected:
 
      QGraphicsTextItem* hover_info_text;
 private:
+    int m_depth = 20;
     int a_row;
     int a_col;
     int power;

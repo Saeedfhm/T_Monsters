@@ -22,7 +22,6 @@ public:
     ~login();
 
 private slots:
-
     void onItemClicked(QListWidgetItem *item);
     void on_game_btn_clicked();
 

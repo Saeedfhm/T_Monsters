@@ -76,30 +76,28 @@ void agent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 void agent::set_power(int p){
     power = p;
 }
+
 int agent::get_power(){
     return  power;
 }
-
-
 
 void agent::Set_aRow(int r){
     a_row = r;
 
 }
+
 int agent::Get_aRow(){
     return a_row;
 }
-
 
 void agent::Set_aCol(int a){
     a_col = a;
 
 }
+
 int agent::Get_aCol(){
     return a_col;
 }
-
-
 
 void agent::Set_aishighlight(bool t){
     a_isHighlighted = t;
@@ -109,10 +107,10 @@ bool agent::Get_aishighlight(){
     return a_isHighlighted;
 }
 
-
 void agent::Set_IsAselected(bool t){
     is_selected = t;
 }
+
 bool agent::Get_IsAselected(){
     return is_selected;
 }
@@ -133,7 +131,6 @@ int agent::Get_Mobility(){
     return Mobility;
 }
 
-
 void agent::set_Damage(int D){
     Damage = D;
 }
@@ -150,16 +147,18 @@ int agent::Get_AttackRange(){
     return AttackRange;
 }
 
-
 bool agent::walk_ground(){
     return true;
 }
+
 bool  agent::walk_water(){
     return true;
 }
+
 bool  agent::stay_ground(){
     return true;
 }
+
 bool  agent::stay_water(){
     return true;
 }
@@ -182,16 +181,12 @@ QColor agent::getBaseColor() const
     }
 }
 
-
 void agent::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton && isEnabled() && m_gamePage) {
            m_gamePage->handleAgentClick(this);
 
-//            qDebug() << "Mouse pressed on hex at row:" << a_row << "col:" << a_col;
-
     }
-    //emit clicked(this);
     QGraphicsPolygonItem::mousePressEvent(event);
 }
 
@@ -203,29 +198,13 @@ void agent::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsPolygonItem::mousePressEvent(event);
 }
 
-
 void agent::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-//    info_label->setText(getInfoText());
-//    info_label->setWordWrap(true);
-//    info_label->adjustSize();
-
-//    QRectF bounds = polygon().boundingRect();
-//    QPointF pos = bounds.topRight() + QPointF(10, -10);
-//    info_widget_proxy->setPos(pos);
-//    info_widget_proxy->setOpacity(0.0);
-//    info_widget_proxy->setVisible(true);
-
-
-//    fade_anim->stop();
-//    fade_anim->setStartValue(0.0);
-//    fade_anim->setEndValue(1.0);
-//    fade_anim->start();
-
+    setHighlight(true);
+    setScale(1.2); // بزرگنمایی
     emit hovered(this);
     QGraphicsPolygonItem::hoverEnterEvent(event);
 }
-
 
 void agent::setupInfoWidget()
 {
@@ -247,17 +226,8 @@ void agent::setupInfoWidget()
 
 void agent::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-
-    fade_anim->stop();
-    fade_anim->setStartValue(1.0);
-    fade_anim->setEndValue(0.0);
-    fade_anim->start();
-
-    connect(fade_anim, &QPropertyAnimation::finished, this, [this]() {
-        if (fade_anim->endValue() == 0.0)
-            info_widget_proxy->setVisible(false);
-    });
-
+    setHighlight(false);
+    setScale(1.0); // بازگشت به اندازه اصلی
     QGraphicsPolygonItem::hoverLeaveEvent(event);
 }
 

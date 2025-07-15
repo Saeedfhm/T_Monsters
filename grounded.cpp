@@ -6,7 +6,6 @@ grounded::grounded(QString n, qreal size, int type, game_page* gamePage, QGraphi
 
 }
 
-
 bool grounded::walk_ground(){
     return true;
 }

@@ -1,5 +1,5 @@
-#include "game_page.h"
 #include "ui_game_page.h"
+#include "game_page.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsOpacityEffect>
@@ -25,6 +25,7 @@
 #include <grounded.h>
 #include <flying.h>
 #include <floating.h>
+#include <QLabel>
 #include "agent.h"
 
 // project done
@@ -365,8 +366,7 @@ void game_page::create_board(){
     for (int col = 0; col < HEX_COLS; ++col) {
        for (int row = 0; row < HEX_ROWS - (col % 2); ++row) {
              qreal x = col * hexWidth * 0.75*1.05+200;
-             qreal y = hexHeight * (row + 0.5 * (col % 2))*1.05+60;
-
+             qreal y = hexHeight * (row + 0.5 * (col % 2))*1.05+80;
              int hexType;
              QString text= fgrid[row][col];
              if (text == "1") {
@@ -588,9 +588,11 @@ void game_page::agentSelected(agent* selected)
      }
 
      selectedAgent = selected;
-     ui->Message->setText(selected->Get_Name() + " selected with" + " HP : " + QString::number(selected->Get_Hp())
-      + " , Mobility : " + QString::number(selected->Get_Mobility()) + "\n  Damage : " + QString::number(selected->Get_Damage())
-      + ", Range : " + QString::number(selected->Get_AttackRange()));
+     QString name = selected->Get_Name();
+     ui->Message->setText("<table><tr><td><img src=':/" + name + ".webp' width='64' height='64'></td>""<td>" + selected->Get_Name()
+     + " selected with" + " HP : " + QString::number(selected->Get_Hp())
+     + " , Mobility : " + QString::number(selected->Get_Mobility()) + "<br>  Range : " + QString::number(selected->Get_AttackRange()) + " , Damage : " + QString::number(selected->Get_Damage()) +
+     "</td>" + "</tr></table>");
      if(selectedAgent->Get_IsAselected()) selectedAgent->Set_IsAselected(false);
      else  selectedAgent->Set_IsAselected(true);
 }
@@ -747,10 +749,10 @@ void game_page::showVictoryScene(int winner) {
     victorySound->play();
 
     // 4. دکمه "بازی مجدد"
-    //    QPushButton* replayButton = new QPushButton("بازی مجدد", this);
-    //    replayButton->setGeometry(200, 300, 120, 40);
-    //    replayButton->show();
-    //    connect(replayButton, &QPushButton::clicked, this, &game_page::resetGame);
+    //QPushButton* replayButton = new QPushButton("بازی مجدد", this);
+    //replayButton->setGeometry(200, 300, 120, 40);
+    //replayButton->show();
+    //connect(replayButton, &QPushButton::clicked, this, &game_page::resetGame);
 
     QPushButton* exitButton = new QPushButton("خروج", this);
     exitButton->setGeometry(540, 380, 120, 40);
@@ -833,7 +835,7 @@ void game_page::handleHexagonClick(int row, int col) {
 
      //------------selec_agent------------
      if(hexGrid[row][col]->placed_agent != nullptr && count >= 10 && tempAgent==nullptr && currentPlayer==hexGrid[row][col]->owner){
-         selec_agent(row , col);
+         select_agent(row , col);
          return;
      }
      // ------------move_after_arrange------------
@@ -849,7 +851,7 @@ void game_page::handleHexagonClick(int row, int col) {
      if (currentPlayer == hexGrid[row][col]->get_m_type() && count < 10 ) move_before_arrange(row , col);
 }
 
-void game_page::selec_agent(int row, int col){
+void game_page::select_agent(int row, int col){
    if(ui->start_game->isEnabled()){
        ui->Message->setText("You have not Start the game");
        return;
@@ -858,17 +860,21 @@ void game_page::selec_agent(int row, int col){
    tempAgent = hexGrid[row][col]->placed_agent;
    int mb = hexGrid[row][col]->placed_agent->Get_Mobility();
    int ar = hexGrid[row][col]->placed_agent->Get_AttackRange();
-   ui->Message->setText(hexGrid[row][col]->placed_agent->Get_Name() + " selected with" + " HP : " + QString::number(hexGrid[row][col]->placed_agent->Get_Hp())
-   + " , Mobility : " + QString::number(hexGrid[row][col]->placed_agent->Get_Mobility()) + "\n  Range : " + QString::number(hexGrid[row][col]->placed_agent->Get_Damage()));
+   QString name = hexGrid[row][col]->placed_agent->Get_Name();
+   ui->Message->setText(
+   "<table><tr><td><img src=':/"+ name + ".webp' width='64' height='64'></td>""<td>" + hexGrid[row][col]->placed_agent->Get_Name()
+   + " selected with" + " HP : " + QString::number(hexGrid[row][col]->placed_agent->Get_Hp())
+   + " , Mobility : " + QString::number(hexGrid[row][col]->placed_agent->Get_Mobility()) + "<br>  Range : " + QString::number(hexGrid[row][col]->placed_agent->Get_AttackRange()) + " , Damage : " + QString::number(hexGrid[row][col]->placed_agent->Get_Damage()) + "</td>" + "</tr></table>");
    BFS(row , col , mb , ar);
 }
 
 bool game_page::check_conditions(int row, int col){
 
     if(hexGrid[row][col]->placed_agent){
-        msg = hexGrid[row][col]->placed_agent->Get_Name() + " selected with" + " HP : " + QString::number(hexGrid[row][col]->placed_agent->Get_Hp())
-        + " , Mobility : " + QString::number(hexGrid[row][col]->placed_agent->Get_Mobility()) + "\n  Damage : " + QString::number(hexGrid[row][col]->placed_agent->Get_Damage())
-        + ", Range : " + QString::number(hexGrid[row][col]->placed_agent->Get_AttackRange());
+        QString name = hexGrid[row][col]->placed_agent->Get_Name();
+        msg = "<table><tr><td><img src=':/" + name + ".webp' width='64' height='64'></td>""<td>" + hexGrid[row][col]->placed_agent->Get_Name()
+        + " selected with" + " HP : " + QString::number(hexGrid[row][col]->placed_agent->Get_Hp())
+        + " , Mobility : " + QString::number(hexGrid[row][col]->placed_agent->Get_Mobility()) + "<br>  Range : " + QString::number(hexGrid[row][col]->placed_agent->Get_AttackRange()) + " , Damage : " + QString::number(hexGrid[row][col]->placed_agent->Get_Damage()) + "</td>" + "</tr></table>";
     }else msg = "";
 
     if (count < 10) {
@@ -965,6 +971,8 @@ void game_page::move_before_arrange(int row, int col){
     hexGrid[row][col]->update();
 
     selectedAgent->hide();
+
+    scene->update();
 
     selectedAgent = nullptr;
 

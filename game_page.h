@@ -34,7 +34,7 @@ public:
     void handleAgentClick(agent* clickedAgent);
     void move_after_arrange(int row , int col);
     void move_before_arrange(int row , int col);
-    void selec_agent(int row , int col);
+    void select_agent(int row , int col);
     void attack(int row , int col);
     bool check_conditions(int row , int col);
 

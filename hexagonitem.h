@@ -90,7 +90,7 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
-
+  qreal m_depth = 20;
   bool m_isHighlighted;
   int m_row;
   int m_col;
