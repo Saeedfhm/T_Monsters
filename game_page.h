@@ -96,6 +96,10 @@ public:
 
     void animateMoveStep();
 
+    QVector<QString> set_agents_in_login(){
+        return  agents_name;
+    }
+
     ~game_page();
 
 

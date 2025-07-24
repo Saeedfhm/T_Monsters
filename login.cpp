@@ -150,9 +150,15 @@ void login::on_game_btn_clicked()
 
 void login::onItemClicked(QListWidgetItem *item){
     QString name = item->text();
+    QVector<QString> agents = gp->set_agents_in_login();
     if(gp->a_size() < 10 && gp->a_size() + 1 != 10){
-        if(gp->a_size() > 4){
-               ui->statusLabel->setText("Turn Player 2");
+        if(gp->a_size() <= 4) ui->statusLabel->setText("Turn Player 1");
+        if(gp->a_size() > 4)  ui->statusLabel->setText("Turn Player 2");
+        for (int i = 0; i < agents.size();i++) {
+            if(agents[i]==name){
+                ui->statusLabel->setText("This agent has already chosen.");
+                return;
+            }
         }
         gp->set_agents_name(name);
     }
@@ -161,6 +167,4 @@ void login::onItemClicked(QListWidgetItem *item){
         this->hide();
         gp->show();
     }
-
-
 }
