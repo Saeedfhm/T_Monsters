@@ -9,7 +9,8 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QGraphicsDropShadowEffect>
-
+#include <QMainWindow>
+#include <QDebug>  // Add this with your other includes
 // project done
 
 login::login(QWidget *parent) :
@@ -20,9 +21,14 @@ login::login(QWidget *parent) :
     ui->game_btn->setFixedSize(80, 30);
     setFixedSize(1200, 800);
 
+    ui->P1_name->setFocusPolicy(Qt::StrongFocus);
+    ui->P2_name->setFocusPolicy(Qt::StrongFocus);
+
     agentslist = new QListWidget(this);
 
     ui->game_btn->setFocusPolicy(Qt::StrongFocus);
+
+    setTabOrder(ui->P1_name, ui->P2_name);
 
     // Player 1 Agents List - Monster Team Blue
     ui->agents1->setStyleSheet(
@@ -249,6 +255,8 @@ login::login(QWidget *parent) :
 
     ui->go_to_gamepage->hide();
 
+    qDebug() << "Current focus:" << this->focusWidget();
+
 
     // Add this to your window constructor
     QGraphicsDropShadowEffect* shadowEffect = new QGraphicsDropShadowEffect();
@@ -281,12 +289,46 @@ login::~login()
 
 void login::keyPressEvent(QKeyEvent *event)
 {
-    // Check for Enter key (ASCII 10 is actually Qt::Key_Return)
+    qDebug() << "Key pressed:" << event->key();
+
+    // Handle Enter key
     if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
-        if(!is_agents_choose) on_game_btn_clicked();
-        else if (gp->a_size() >= 10) on_go_to_gamepage_clicked();
+        if (!is_agents_choose) {
+            on_game_btn_clicked();
+            event->accept();
+            return;
+        }
+        else if (ui->P1_name->text().isEmpty()) {
+            ui->P2_name->setFocus();
+            event->accept();
+            return;
+        }
+        else if (gp && gp->a_size() >= 10) {
+            on_go_to_gamepage_clicked();
+            event->accept();
+            return;
+        }
     }
-    QMainWindow::keyPressEvent(event);  // Pass other keys to parent
+
+    // Handle PageUp/PageDown navigation
+    if (event->key() == Qt::Key_PageUp) {
+        if (ui->P1_name->isEnabled()) {
+            ui->P1_name->setFocus();
+            ui->P1_name->selectAll();
+            event->accept();
+            return;
+        }
+    }
+    else if (event->key() == Qt::Key_PageDown) {
+        if (ui->P2_name->isEnabled()) {
+            ui->P2_name->setFocus();
+            ui->P2_name->selectAll();
+            event->accept();
+            return;
+        }
+    }
+
+    QMainWindow::keyPressEvent(event);
 }
 
 void login::on_game_btn_clicked(){

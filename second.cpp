@@ -65,6 +65,7 @@ void second::keyPressEvent(QKeyEvent *event)
     }
     QMainWindow::keyPressEvent(event);
 }
+
 void second::on_gallery_btn_clicked()
 {
     hide();
