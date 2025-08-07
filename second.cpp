@@ -40,6 +40,9 @@ second::second(QWidget *parent) :
         "}"
     );
 
+//    ui->gallery_btn->installEventFilter(this);
+//    ui->start_btn->installEventFilter(this);
+
 
 }
 
@@ -48,6 +51,20 @@ second::~second()
     delete ui;
 }
 
+void second::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+        QWidget *focused = focusWidget();
+
+        if (focused == ui->gallery_btn) {
+            on_gallery_btn_clicked();
+        }
+        else if (focused == ui->start_btn) {
+            on_start_btn_clicked();
+        }
+    }
+    QMainWindow::keyPressEvent(event);
+}
 void second::on_gallery_btn_clicked()
 {
     hide();

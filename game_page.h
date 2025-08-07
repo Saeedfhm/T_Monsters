@@ -111,6 +111,9 @@ private slots:
 
     void on_start_game_clicked();
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
 private:
     int hrows;
     int hcols;
@@ -135,6 +138,8 @@ private:
     bool a_t = false;
     int type;
     QString msg = "";
+    bool is_loaded = false;
+    bool is_started = false;
 };
 
 #endif // GAME_PAGE_H

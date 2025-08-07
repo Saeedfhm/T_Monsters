@@ -21,9 +21,14 @@ public:
 
     ~login();
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
 private slots:
     void onItemClicked(QListWidgetItem *item);
     void on_game_btn_clicked();
+
+    void on_go_to_gamepage_clicked();
 
 private:
     Ui::login *ui;
@@ -31,6 +36,12 @@ private:
     QListWidget* agentslist;
     QVector <agent *> agents;
     QLabel* statusLabel = new QLabel(this);
+    QString Player_1_agents = "Player1\n";
+    QString Player_2_agents = "Player2\n";
+    int Turn = 1;
+    bool is_Done = false;
+    bool is_agents_choose = false;
+
 };
 
 #endif // LOGIN_H

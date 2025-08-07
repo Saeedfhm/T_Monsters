@@ -15,6 +15,10 @@ public:
     explicit second(QWidget *parent = nullptr);
     ~second();
 
+protected:
+//    bool eventFilter(QObject *obj, QEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+
 private slots:
     void on_gallery_btn_clicked();
 

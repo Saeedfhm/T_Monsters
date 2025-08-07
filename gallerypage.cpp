@@ -1,7 +1,7 @@
 #include "gallerypage.h"
 #include "ui_gallerypage.h"
 #include "second.h"
-
+#include <QKeyEvent>
 // project done
 
 gallerypage::gallerypage(QWidget *parent) :
@@ -345,6 +345,14 @@ gallerypage::~gallerypage()
     delete ui;
 }
 
+void gallerypage::keyPressEvent(QKeyEvent *event)
+{
+    // Check for Enter key (ASCII 10 is actually Qt::Key_Return)
+    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+        on_back_clicked();
+    }
+    QMainWindow::keyPressEvent(event);  // Pass other keys to parent
+}
 
 void gallerypage::on_back_clicked()
 {

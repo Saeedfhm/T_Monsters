@@ -18,8 +18,11 @@ public:
     ~gallerypage();
 
 private slots:
-
     void on_back_clicked();
+
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     Ui::gallerypage *ui;

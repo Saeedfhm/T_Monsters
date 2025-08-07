@@ -85,6 +85,20 @@ game_page::~game_page()
     delete ui;
 }
 
+void game_page::keyPressEvent(QKeyEvent *event)
+{
+    // Check for Enter key (ASCII 10 is actually Qt::Key_Return)
+    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+        if(!is_loaded){
+            on_load_game_btn_clicked();
+        }
+        if(!is_started) {
+            on_start_game_clicked();
+        }
+    }
+    QMainWindow::keyPressEvent(event);  // Pass other keys to parent
+}
+
 void game_page::add_agent(){
 
     int j = 0;
@@ -514,6 +528,8 @@ void game_page::parse(const QString &filepath){
               }
           }
       }
+
+          is_loaded = true;
  }
 
 void game_page::set_name(const QString &name1, const QString & name2){
@@ -525,8 +541,9 @@ void game_page::set_name(const QString &name1, const QString & name2){
 void game_page::on_load_game_btn_clicked()
 {
     int r = rand() % 8 + 1;
-    parse("D:/barname_sazi/project(c++)/tacticalmonster2025_f2_v2/grid" + QString::number(r) + ".txt");
+    parse("D:/university/barname_sazi/project(c++)/tacticalmonster2025_f2_v2/grid" + QString::number(r) + ".txt");
     ui->load_game_btn->setDisabled(true);
+
 }
 
 void game_page::startPlayerTurn()
@@ -985,6 +1002,7 @@ void game_page::move_before_arrange(int row, int col){
 }
 
 void game_page::attack(int row , int col){
+
     if (((currentPlayer == 1 &&  hexGrid[row][col]->owner == 2) || (currentPlayer == 2 &&  hexGrid[row][col]->owner == 1)) && hexGrid[row][col]->is_inAttackRange){
     int Dam = temph->placed_agent->Get_Damage();
     int hp =  hexGrid[row][col]->placed_agent->Get_Hp();
@@ -1052,6 +1070,7 @@ void game_page::on_start_game_clicked(){
         connect(turnTimer, &QTimer::timeout, this, &game_page::updateTimer);
         startPlayerTurn();
         ui->start_game->setDisabled(true);
+        is_started = true;
     }
 
 }
