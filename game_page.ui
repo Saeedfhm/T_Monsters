@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/new/background/image/background/16_37_22_raw.jpg);</string>
+   <string notr="true">background-image: url(:/new/background/image/background/ChatGPT Image Aug 9, 2025, 05_42_24 PM.png);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -176,7 +176,7 @@ background-color: transparent;</string>
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">color: rgb(10, 31, 68);
+             <string notr="true">color: rgb(255, 255, 255);
 font: 28pt &quot;Palatino Linotype&quot;;
 border-radius: 15px;</string>
             </property>
@@ -233,7 +233,7 @@ border-radius: 15px;</string>
                 </size>
                </property>
                <property name="styleSheet">
-                <string notr="true"/>
+                <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));</string>
                </property>
                <property name="text">
                 <string>Load</string>
@@ -257,7 +257,7 @@ border-radius: 15px;</string>
            </widget>
           </item>
           <item>
-           <widget class="QWidget" name="verticalWidget_4" native="true">
+           <widget class="QWidget" name="MessageandTimer" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>90</horstretch>
@@ -284,6 +284,7 @@ border-radius: 45px;</string>
                      <widget class="QLabel" name="player1Timer">
                       <property name="styleSheet">
                        <string notr="true">font: 24pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 255, 255);
 background-color: transparent;
 border-radius: 45px;</string>
                       </property>
@@ -299,6 +300,7 @@ border-radius: 45px;</string>
                      <widget class="QLabel" name="player2Timer">
                       <property name="styleSheet">
                        <string notr="true">font: 24pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 255, 255);
 background-color: transparent;
 border-radius: 45px;</string>
                       </property>
@@ -322,7 +324,8 @@ border-radius: 45px;</string>
                <item>
                 <widget class="QLabel" name="Message">
                  <property name="styleSheet">
-                  <string notr="true">font: 75 15pt &quot;Constantia&quot;;</string>
+                  <string notr="true">font: 75 15pt &quot;Constantia&quot;;
+color: rgb(255, 255, 255);</string>
                  </property>
                  <property name="text">
                   <string/>
@@ -379,7 +382,7 @@ background-color: transparent;</string>
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">color: rgb(10, 31, 68);
+             <string notr="true">color: rgb(255, 255, 255);
 font: 28pt &quot;Palatino Linotype&quot;;
 border-radius: 15px;</string>
             </property>

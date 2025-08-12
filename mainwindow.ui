@@ -26,11 +26,11 @@ background-position: center;</string>
       <x>510</x>
       <y>500</y>
       <width>93</width>
-      <height>34</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 255), stop:0.495 rgba(255, 255, 255, 255), stop:0.505 rgba(255, 0, 0, 255), stop:1 rgba(255, 0, 0, 255));</string>
     </property>
     <property name="text">
      <string>go</string>

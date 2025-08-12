@@ -35,42 +35,100 @@ game_page::game_page(QWidget *parent) :
     ui(new Ui::game_page),
     scene(new QGraphicsScene(this))
 {
-
     setFixedSize(1200, 800);
     setWindowTitle("game");
 
     ui->setupUi(this);
 
-    ui->start_game->setFixedSize(100, 50);
+    ui->verticalWidget_3->setFixedSize(236,139);
+    ui->verticalWidget_4->setFixedSize(236,139);
+    ui->MessageandTimer->setFixedSize(599,139);
+    ui->Message->setFixedSize(579,65);
+
+
+    // Start Game Button - Primary Action (Darker Green)
+    ui->start_game->setFixedSize(180    , 60);  // More prominent size for primary action
     ui->start_game->setStyleSheet(
        "QPushButton {"
-       "   border-radius: 15px;"
-       "   background-color: #4CAF50;"
-       "   padding: 8px;"
-       "   color: white;"
-       "   font: 75 25pt C059;"
+       "   border-radius: 16px;"
+       "   background-color: #2E7D32;"  // Rich dark green
+       "   padding: 10px;"
+       "   color: #E8F5E9;"  // Light green text
+       "   font: bold 18pt 'Segoe UI';"
+       "   border: 2px solid #1B5E20;"  // Darker border
+       "   box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);"  // Green-tinted shadow
+       "   transition: all 0.3s ease;"
        "}"
        "QPushButton:hover {"
-       "   background-color: #2b5532;" /* تغییر رنگ هنگام هاور */
+       "   background-color: #1B5E20;"  // Deep forest green
+       "   border: 2px solid #0D3B13;"
+       "   box-shadow: 0 6px 16px rgba(27, 94, 32, 0.4);"
+       "   transform: translateY(-2px);"
+       "}"
+       "QPushButton:pressed {"
+       "   background-color: #0D3B13;"  // Very dark green
+       "   transform: translateY(1px);"
+       "   box-shadow: 0 2px 8px rgba(13, 59, 19, 0.3);"
        "}"
     );
 
-    ui->load_game_btn->setFixedSize(100, 50);
+    // Load Game Button - Secondary Action (Slightly Lighter Green)
+    ui->load_game_btn->setFixedSize(180, 60);
     ui->load_game_btn->setStyleSheet(
         "QPushButton {"
         "   border-radius: 15px;"
-        "   background-color: #4CAF50;"
+        "   background-color: #388E3C;"  // Slightly lighter green
         "   padding: 8px;"
-        "   color: white;"
-        "   font: 75 25pt C059;"
+        "   color: #E8F5E9;"  // Same light text
+        "   font: bold 16pt 'Segoe UI';"
+        "   border: 2px solid #2E7D32;"  // Matching the start button's base color
+        "   box-shadow: 0 4px 10px rgba(56, 142, 60, 0.25);"
+        "   transition: all 0.3s ease;"
         "}"
         "QPushButton:hover {"
-        "   background-color: #2b5532;" /* تغییر رنگ هنگام هاور */
+        "   background-color: #2E7D32;"  // Transition to start button's color
+        "   border: 2px solid #1B5E20;"
+        "   box-shadow: 0 6px 14px rgba(46, 125, 50, 0.35);"
+        "   transform: translateY(-2px);"
+        "}"
+        "QPushButton:pressed {"
+        "   background-color: #1B5E20;"  // Darker when pressed
+        "   transform: translateY(1px);"
+        "   box-shadow: 0 2px 6px rgba(27, 94, 32, 0.25);"
         "}"
     );
 
+    // Optional: Add subtle glow effects using QGraphicsDropShadowEffect
+    QGraphicsDropShadowEffect* startGlow = new QGraphicsDropShadowEffect();
+    startGlow->setBlurRadius(15);
+    startGlow->setColor(QColor(46, 125, 50, 150));
+    startGlow->setOffset(0, 4);
+    ui->start_game->setGraphicsEffect(startGlow);
+
+    QGraphicsDropShadowEffect* loadGlow = new QGraphicsDropShadowEffect();
+    loadGlow->setBlurRadius(12);
+    loadGlow->setColor(QColor(56, 142, 60, 120));
+    loadGlow->setOffset(0, 3);
+    ui->load_game_btn->setGraphicsEffect(loadGlow);
+
+
+
+    ui->vw1->setMinimumSize(1182, 549);
+    ui->vw1->setMaximumSize(1182, 549);
+
+    ui->vw1->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->vw1->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     ui->vw1->setRenderHint(QPainter::Antialiasing);
+    scene->setSceneRect(0, 0, ui->vw1->width(), ui->vw1->height());
     ui->vw1->setScene(scene);
+
+    ui->vw1->move((1200 - 1182) / 2, (800 - 549) / 2);
+
+    ui->vw1->centerOn(scene->itemsBoundingRect().center());
+
+    ui->vw1->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
+
     currentPlayer = 1;
     timeRemaining = 2 * 60;
     selectedAgent = nullptr;
@@ -379,8 +437,8 @@ void game_page::create_board(){
 
     for (int col = 0; col < HEX_COLS; ++col) {
        for (int row = 0; row < HEX_ROWS - (col % 2); ++row) {
-             qreal x = col * hexWidth * 0.75*1.05+200;
-             qreal y = hexHeight * (row + 0.5 * (col % 2))*1.05+80;
+             qreal x = 200 + col * hexWidth *0.75*1.05;
+             qreal y = hexHeight * (row + 0.5 * (col % 2)) * 1.05;
              int hexType;
              QString text= fgrid[row][col];
              if (text == "1") {
@@ -543,6 +601,22 @@ void game_page::on_load_game_btn_clicked()
     int r = rand() % 8 + 1;
     parse("D:/university/barname_sazi/project(c++)/tacticalmonster2025_f2_v2/grid" + QString::number(r) + ".txt");
     ui->load_game_btn->setDisabled(true);
+    qDebug() << "Scene Rect:" << scene->sceneRect();
+    qDebug() << "Items bounding rect:" << scene->itemsBoundingRect();
+    qDebug() << "Total items in scene:" << scene->items().count();
+
+    QRectF itemsRect = scene->itemsBoundingRect();
+    if (!itemsRect.isNull()) {
+        // اضافه کردن 10% حاشیه به محدوده
+        qreal margin = itemsRect.width() * 0.1;
+        itemsRect.adjust(-margin, -margin, margin, margin);
+
+        scene->setSceneRect(itemsRect);
+        ui->vw1->fitInView(itemsRect, Qt::KeepAspectRatio);
+
+        // برای اطمینان از نمایش کامل
+        qDebug() << "Adjusted Scene Rect:" << scene->sceneRect();
+    }
 
 }
 
