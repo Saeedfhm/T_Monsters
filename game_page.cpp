@@ -437,8 +437,8 @@ void game_page::create_board(){
 
     for (int col = 0; col < HEX_COLS; ++col) {
        for (int row = 0; row < HEX_ROWS - (col % 2); ++row) {
-             qreal x = 200 + col * hexWidth *0.75*1.05;
-             qreal y = hexHeight * (row + 0.5 * (col % 2)) * 1.05;
+             qreal x = 200 + col * hexWidth *0.75*1.1;
+             qreal y = hexHeight * (row + 0.5 * (col % 2)) * 1.1;
              int hexType;
              QString text= fgrid[row][col];
              if (text == "1") {
@@ -1098,6 +1098,7 @@ void game_page::attack(int row , int col){
         ui->Message->setText("Agent " + defender + " died in " + QString::number(row) + " , " + QString::number(col));
         if(currentPlayer == 1) p2_count--;
         if(currentPlayer == 2) p1_count--;
+
     }
     bool attacker_died = false;
     if(hp1 == 0){

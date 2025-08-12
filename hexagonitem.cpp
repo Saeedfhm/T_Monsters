@@ -230,19 +230,21 @@ void hexagonitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
        }
 
        if (m_type == 6) {
-           painter->setRenderHint(QPainter::Antialiasing);
-           painter->setPen(QPen(Qt::red, 3));
+//           painter->setRenderHint(QPainter::Antialiasing);
+//           painter->setPen(QPen(Qt::red, 3));
 
-           QRectF rect = boundingRect();
-           qreal marginX = rect.width() * 0.2;
-           qreal marginY = rect.height() * 0.2;
+//           QRectF rect = boundingRect();
+//           qreal marginX = rect.width() * 0.2;
+//           qreal marginY = rect.height() * 0.2;
 
-           QPointF topLeft = rect.topLeft() + QPointF(marginX, marginY);
-           QPointF topRight = rect.topRight() + QPointF(-marginX, marginY);
-           QPointF bottomLeft = rect.bottomLeft() + QPointF(marginX, -marginY);
-           QPointF bottomRight = rect.bottomRight() + QPointF(-marginX, -marginY);
+//           QPointF topLeft = rect.topLeft() + QPointF(marginX, marginY);
+//           QPointF topRight = rect.topRight() + QPointF(-marginX, marginY);
+//           QPointF bottomLeft = rect.bottomLeft() + QPointF(marginX, -marginY);
+//           QPointF bottomRight = rect.bottomRight() + QPointF(-marginX, -marginY);
 
-           painter->drawLine(topLeft, bottomRight);
-           painter->drawLine(topRight, bottomLeft);
+//           painter->drawLine(topLeft, bottomRight);
+//           painter->drawLine(topRight, bottomLeft);
+            setVisible(false);
+           return;
        }
 }
